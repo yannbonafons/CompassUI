@@ -27,15 +27,17 @@ struct CancelToolbarItem: ToolbarContent {
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button(role: .cancel) {
+            Button(role: .cancel, action: {
                 action()
-            }
+            }, label: {
+                Text("Cancel")
+            })
         }
     }
 }
 
 extension View {
-    public func asModal(coordinator: SheetCoordinatorProtocol) -> some View {
+    func asModal(coordinator: SheetCoordinatorProtocol) -> some View {
         self.modifier(ModalNavigationModifier(coordinator: coordinator))
     }
 }

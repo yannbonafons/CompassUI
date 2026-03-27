@@ -22,7 +22,6 @@ enum SettingsRoute: NavigationRoute {
 
 enum SettingsSheetRoute: SheetRoute {
     case info(infoPayload: InfoPayload)
-    case login(loginPayload: LoginPayload)
 
     @ViewBuilder
     var destinationView: some View {
@@ -34,8 +33,6 @@ enum SettingsSheetRoute: SheetRoute {
                 InfoBuilder.createView(with: InfoPayload(context: context))
                     .asModal(coordinator: context.sheetCoordinator)
             }
-        case .login:
-            EmptyView()
         }
     }
 }

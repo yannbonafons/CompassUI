@@ -18,7 +18,7 @@ private struct CustomAlertModifier<CoordinatorType: AlertCoordinatorProtocol>: V
                        isPresented: .constant(true),
                        actions: {
                     if let confgurationTextFieldInfo = conf.textFieldInfo {
-                        TextField(confgurationTextFieldInfo.placeholder.localizedStringResource,
+                        TextField(String(localized: confgurationTextFieldInfo.placeholder),
                                   text: $text)
                         .keyboardType(confgurationTextFieldInfo.keyboardType)
                     }

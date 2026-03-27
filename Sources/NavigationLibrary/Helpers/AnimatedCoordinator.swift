@@ -2,7 +2,7 @@
 //  AnimatedCoordinator.swift
 //  NavigationLibrary
 //
-//  Created by Yann Bonafons on 26/03/2026.
+//  Created by Yann Bonafons on 27/03/2026.
 //
 
 import SwiftUI
@@ -21,17 +21,5 @@ extension AnimatedCoordinator {
                 action()
             }
         }
-    }
-}
-
-public protocol HashableProtocol: AnyObject, Hashable {}
-
-extension HashableProtocol {
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(ObjectIdentifier(self))
     }
 }

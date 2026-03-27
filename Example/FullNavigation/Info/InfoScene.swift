@@ -34,7 +34,7 @@ struct InfoRouter: InfoRouterProtocol, RouterProtocol {
 struct InfoPayload: PayloadProtocol {
     typealias BuilderType = InfoBuilder
 
-    let initialName = "???"
+    let initialName = "Info"
     let context: RouterContext
 }
 
