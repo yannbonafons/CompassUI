@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SheetStackModifier<CoordinatorType: StackableSheetProtocol>: ViewModifier {
+private struct SheetStackModifier<CoordinatorType: StackableSheetProtocol>: ViewModifier {
     @Bindable var coordinator: CoordinatorType
     let index: Int
 

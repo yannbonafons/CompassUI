@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct SheetConfiguration {
-    public let detents: Set<PresentationDetent>
+    let detents: Set<PresentationDetent>
 
     public init(detents: Set<PresentationDetent> = [.large]) {
         self.detents = detents

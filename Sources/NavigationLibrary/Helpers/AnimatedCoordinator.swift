@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-public protocol AnimatedCoordinator {}
+protocol AnimatedCoordinator {}
 
 extension AnimatedCoordinator {
-    public func execute(animated: Bool = true,
+    func execute(animated: Bool = true,
                         action: () -> Void) {
         if animated {
             action()

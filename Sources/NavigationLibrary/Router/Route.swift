@@ -14,7 +14,7 @@ public protocol Route: Hashable {
     var destinationView: ViewType { get }
 }
 
-public protocol AnyRoute: Hashable, Identifiable {
+protocol AnyRoute: Hashable, Identifiable {
     var id: AnyHashable { get }
 }
 

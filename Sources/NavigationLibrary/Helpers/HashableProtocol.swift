@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-public protocol HashableProtocol: AnyObject, Hashable {}
+protocol HashableProtocol: AnyObject, Hashable {}
 
 extension HashableProtocol {
     public static func == (lhs: Self, rhs: Self) -> Bool {

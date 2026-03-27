@@ -14,7 +14,7 @@ extension TabRoute {
 }
 
 public struct AnyTabRoute: Hashable {
-    public let id: AnyHashable
+    let id: AnyHashable
 
     public init(id: AnyHashable) {
         self.id = id

@@ -9,18 +9,18 @@ import SwiftUI
 
 public protocol NavigationRoute: Route {}
 
-public struct AnyNavigationRoute: AnyRoute {
-    public let id: AnyHashable
-    public let destinationView: AnyView
+struct AnyNavigationRoute: AnyRoute {
+    let id: AnyHashable
+    let destinationView: AnyView
 
-    public init(id: AnyHashable, destinationView: AnyView) {
+    init(id: AnyHashable, destinationView: AnyView) {
         self.id = id
         self.destinationView = destinationView
     }
 }
 
 extension NavigationRoute {
-    public func erased() -> AnyNavigationRoute {
+    func erased() -> AnyNavigationRoute {
         AnyNavigationRoute(id: AnyHashable(self),
                            destinationView: AnyView(destinationView))
     }
