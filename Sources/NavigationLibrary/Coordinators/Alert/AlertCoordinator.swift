@@ -15,7 +15,7 @@ public protocol AlertCoordinatorProtocol: AnyObject, Observable {
 
 @Observable
 public class AlertCoordinator: HashableProtocol, AlertCoordinatorProtocol {
-    public var alertConfigurations: [AlertConfiguration] = []
+    var alertConfigurations: [AlertConfiguration] = []
     public var alertConfiguration: AlertConfiguration? {
         alertConfigurations.last
     }

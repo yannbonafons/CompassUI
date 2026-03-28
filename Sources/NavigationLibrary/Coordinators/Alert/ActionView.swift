@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-public struct ActionView: View {
-    public let actionInfo: ActionInfo
+struct ActionView: View {
+    let actionInfo: ActionInfo
 
-    public init(actionInfo: ActionInfo) {
+    init(actionInfo: ActionInfo) {
         self.actionInfo = actionInfo
     }
 
-    public var body: some View {
+    var body: some View {
         switch actionInfo {
         case .text(let localizedStringResource):
             Text(localizedStringResource)

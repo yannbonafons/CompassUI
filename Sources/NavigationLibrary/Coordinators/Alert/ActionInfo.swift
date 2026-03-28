@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-public enum ActionInfo {
+enum ActionInfo {
     case text(LocalizedStringResource)
     case image(String)
     case imageAndText(String, LocalizedStringResource)
 
-    public var text: LocalizedStringResource? {
+    var text: LocalizedStringResource? {
         switch self {
         case .text(let value):
             return value
@@ -23,7 +23,7 @@ public enum ActionInfo {
         }
     }
 
-    public var imageName: String? {
+    var imageName: String? {
         switch self {
         case .text:
             return nil

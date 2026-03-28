@@ -19,10 +19,10 @@ extension SheetRoute {
 
 public struct AnySheetRoute: AnyRoute {
     public let id: AnyHashable
-    public let configuration: SheetConfiguration
-    public let destinationView: AnyView
+    let configuration: SheetConfiguration
+    let destinationView: AnyView
 
-    public init(id: AnyHashable, configuration: SheetConfiguration, destinationView: AnyView) {
+    init(id: AnyHashable, configuration: SheetConfiguration, destinationView: AnyView) {
         self.id = id
         self.configuration = configuration
         self.destinationView = destinationView
@@ -30,7 +30,7 @@ public struct AnySheetRoute: AnyRoute {
 }
 
 extension SheetRoute {
-    public func erased() -> AnySheetRoute {
+    func erased() -> AnySheetRoute {
         AnySheetRoute(
             id: AnyHashable(self),
             configuration: configuration,
