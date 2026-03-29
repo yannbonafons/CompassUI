@@ -6,47 +6,43 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		6B942F5E2F7915E000EC3AFC /* NavigationLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 6B942F5D2F7915E000EC3AFC /* NavigationLibrary */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		6B942EF62F79124E00EC3AFC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6B942EE02F79124B00EC3AFC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 6B942EE72F79124B00EC3AFC;
-			remoteInfo = "ExampleNavigation​App";
+			remoteInfo = "ExampleNavigationApp";
 		};
 		6B942F002F79124E00EC3AFC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6B942EE02F79124B00EC3AFC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 6B942EE72F79124B00EC3AFC;
-			remoteInfo = "ExampleNavigation​App";
+			remoteInfo = "ExampleNavigationApp";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		6B942EE82F79124B00EC3AFC /* ExampleNavigation​App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ExampleNavigation​App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6B942EF52F79124E00EC3AFC /* ExampleNavigation​AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ExampleNavigation​AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6B942EFF2F79124E00EC3AFC /* ExampleNavigation​AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ExampleNavigation​AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B942EE82F79124B00EC3AFC /* ExampleNavigationApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ExampleNavigationApp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B942EF52F79124E00EC3AFC /* ExampleNavigationAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ExampleNavigationAppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B942EFF2F79124E00EC3AFC /* ExampleNavigationAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ExampleNavigationAppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		6B942EEA2F79124B00EC3AFC /* ExampleNavigation​App */ = {
+		6B942EEA2F79124B00EC3AFC /* ExampleNavigationApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "ExampleNavigation​App";
+			path = "ExampleNavigationApp";
 			sourceTree = "<group>";
 		};
-		6B942EF82F79124E00EC3AFC /* ExampleNavigation​AppTests */ = {
+		6B942EF82F79124E00EC3AFC /* ExampleNavigationAppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "ExampleNavigation​AppTests";
+			path = "ExampleNavigationAppTests";
 			sourceTree = "<group>";
 		};
-		6B942F022F79124E00EC3AFC /* ExampleNavigation​AppUITests */ = {
+		6B942F022F79124E00EC3AFC /* ExampleNavigationAppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "ExampleNavigation​AppUITests";
+			path = "ExampleNavigationAppUITests";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -56,7 +52,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B942F5E2F7915E000EC3AFC /* NavigationLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,9 +75,9 @@
 		6B942EDF2F79124B00EC3AFC = {
 			isa = PBXGroup;
 			children = (
-				6B942EEA2F79124B00EC3AFC /* ExampleNavigation​App */,
-				6B942EF82F79124E00EC3AFC /* ExampleNavigation​AppTests */,
-				6B942F022F79124E00EC3AFC /* ExampleNavigation​AppUITests */,
+				6B942EEA2F79124B00EC3AFC /* ExampleNavigationApp */,
+				6B942EF82F79124E00EC3AFC /* ExampleNavigationAppTests */,
+				6B942F022F79124E00EC3AFC /* ExampleNavigationAppUITests */,
 				6B942EE92F79124B00EC3AFC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,9 +85,9 @@
 		6B942EE92F79124B00EC3AFC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6B942EE82F79124B00EC3AFC /* ExampleNavigation​App.app */,
-				6B942EF52F79124E00EC3AFC /* ExampleNavigation​AppTests.xctest */,
-				6B942EFF2F79124E00EC3AFC /* ExampleNavigation​AppUITests.xctest */,
+				6B942EE82F79124B00EC3AFC /* ExampleNavigationApp.app */,
+				6B942EF52F79124E00EC3AFC /* ExampleNavigationAppTests.xctest */,
+				6B942EFF2F79124E00EC3AFC /* ExampleNavigationAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -100,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6B942EE72F79124B00EC3AFC /* ExampleNavigation​App */ = {
+		6B942EE72F79124B00EC3AFC /* ExampleNavigationApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6B942F092F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigation​App" */;
+			buildConfigurationList = 6B942F092F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigationApp" */;
 			buildPhases = (
 				6B942EE42F79124B00EC3AFC /* Sources */,
 				6B942EE52F79124B00EC3AFC /* Frameworks */,
@@ -113,19 +108,18 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				6B942EEA2F79124B00EC3AFC /* ExampleNavigation​App */,
+				6B942EEA2F79124B00EC3AFC /* ExampleNavigationApp */,
 			);
-			name = "ExampleNavigation​App";
+			name = "ExampleNavigationApp";
 			packageProductDependencies = (
-				6B942F5D2F7915E000EC3AFC /* NavigationLibrary */,
 			);
-			productName = "ExampleNavigation​App";
-			productReference = 6B942EE82F79124B00EC3AFC /* ExampleNavigation​App.app */;
+			productName = "ExampleNavigationApp";
+			productReference = 6B942EE82F79124B00EC3AFC /* ExampleNavigationApp.app */;
 			productType = "com.apple.product-type.application";
 		};
-		6B942EF42F79124E00EC3AFC /* ExampleNavigation​AppTests */ = {
+		6B942EF42F79124E00EC3AFC /* ExampleNavigationAppTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6B942F0C2F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigation​AppTests" */;
+			buildConfigurationList = 6B942F0C2F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigationAppTests" */;
 			buildPhases = (
 				6B942EF12F79124E00EC3AFC /* Sources */,
 				6B942EF22F79124E00EC3AFC /* Frameworks */,
@@ -137,18 +131,18 @@
 				6B942EF72F79124E00EC3AFC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				6B942EF82F79124E00EC3AFC /* ExampleNavigation​AppTests */,
+				6B942EF82F79124E00EC3AFC /* ExampleNavigationAppTests */,
 			);
-			name = "ExampleNavigation​AppTests";
+			name = "ExampleNavigationAppTests";
 			packageProductDependencies = (
 			);
-			productName = "ExampleNavigation​AppTests";
-			productReference = 6B942EF52F79124E00EC3AFC /* ExampleNavigation​AppTests.xctest */;
+			productName = "ExampleNavigationAppTests";
+			productReference = 6B942EF52F79124E00EC3AFC /* ExampleNavigationAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		6B942EFE2F79124E00EC3AFC /* ExampleNavigation​AppUITests */ = {
+		6B942EFE2F79124E00EC3AFC /* ExampleNavigationAppUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6B942F0F2F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigation​AppUITests" */;
+			buildConfigurationList = 6B942F0F2F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigationAppUITests" */;
 			buildPhases = (
 				6B942EFB2F79124E00EC3AFC /* Sources */,
 				6B942EFC2F79124E00EC3AFC /* Frameworks */,
@@ -160,13 +154,13 @@
 				6B942F012F79124E00EC3AFC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				6B942F022F79124E00EC3AFC /* ExampleNavigation​AppUITests */,
+				6B942F022F79124E00EC3AFC /* ExampleNavigationAppUITests */,
 			);
-			name = "ExampleNavigation​AppUITests";
+			name = "ExampleNavigationAppUITests";
 			packageProductDependencies = (
 			);
-			productName = "ExampleNavigation​AppUITests";
-			productReference = 6B942EFF2F79124E00EC3AFC /* ExampleNavigation​AppUITests.xctest */;
+			productName = "ExampleNavigationAppUITests";
+			productReference = 6B942EFF2F79124E00EC3AFC /* ExampleNavigationAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -192,7 +186,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6B942EE32F79124B00EC3AFC /* Build configuration list for PBXProject "ExampleNavigation​App" */;
+			buildConfigurationList = 6B942EE32F79124B00EC3AFC /* Build configuration list for PBXProject "ExampleNavigationApp" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -202,16 +196,15 @@
 			mainGroup = 6B942EDF2F79124B00EC3AFC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				6B942F5C2F7915E000EC3AFC /* XCRemoteSwiftPackageReference "CompassUI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6B942EE92F79124B00EC3AFC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6B942EE72F79124B00EC3AFC /* ExampleNavigation​App */,
-				6B942EF42F79124E00EC3AFC /* ExampleNavigation​AppTests */,
-				6B942EFE2F79124E00EC3AFC /* ExampleNavigation​AppUITests */,
+				6B942EE72F79124B00EC3AFC /* ExampleNavigationApp */,
+				6B942EF42F79124E00EC3AFC /* ExampleNavigationAppTests */,
+				6B942EFE2F79124E00EC3AFC /* ExampleNavigationAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -267,12 +260,12 @@
 /* Begin PBXTargetDependency section */
 		6B942EF72F79124E00EC3AFC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6B942EE72F79124B00EC3AFC /* ExampleNavigation​App */;
+			target = 6B942EE72F79124B00EC3AFC /* ExampleNavigationApp */;
 			targetProxy = 6B942EF62F79124E00EC3AFC /* PBXContainerItemProxy */;
 		};
 		6B942F012F79124E00EC3AFC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 6B942EE72F79124B00EC3AFC /* ExampleNavigation​App */;
+			target = 6B942EE72F79124B00EC3AFC /* ExampleNavigationApp */;
 			targetProxy = 6B942F002F79124E00EC3AFC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -481,7 +474,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ExampleNavigation​App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ExampleNavigation​App";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ExampleNavigationApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ExampleNavigationApp";
 			};
 			name = Debug;
 		};
@@ -503,7 +496,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ExampleNavigation​App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ExampleNavigation​App";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ExampleNavigationApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ExampleNavigationApp";
 			};
 			name = Release;
 		};
@@ -523,7 +516,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "ExampleNavigation​App";
+				TEST_TARGET_NAME = "ExampleNavigationApp";
 			};
 			name = Debug;
 		};
@@ -543,14 +536,14 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "ExampleNavigation​App";
+				TEST_TARGET_NAME = "ExampleNavigationApp";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6B942EE32F79124B00EC3AFC /* Build configuration list for PBXProject "ExampleNavigation​App" */ = {
+		6B942EE32F79124B00EC3AFC /* Build configuration list for PBXProject "ExampleNavigationApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6B942F072F79124E00EC3AFC /* Debug */,
@@ -559,7 +552,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6B942F092F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigation​App" */ = {
+		6B942F092F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigationApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6B942F0A2F79124E00EC3AFC /* Debug */,
@@ -568,7 +561,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6B942F0C2F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigation​AppTests" */ = {
+		6B942F0C2F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigationAppTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6B942F0D2F79124E00EC3AFC /* Debug */,
@@ -577,7 +570,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6B942F0F2F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigation​AppUITests" */ = {
+		6B942F0F2F79124E00EC3AFC /* Build configuration list for PBXNativeTarget "ExampleNavigationAppUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6B942F102F79124E00EC3AFC /* Debug */,
@@ -587,25 +580,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		6B942F5C2F7915E000EC3AFC /* XCRemoteSwiftPackageReference "CompassUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/yannbonafons/CompassUI";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		6B942F5D2F7915E000EC3AFC /* NavigationLibrary */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6B942F5C2F7915E000EC3AFC /* XCRemoteSwiftPackageReference "CompassUI" */;
-			productName = NavigationLibrary;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6B942EE02F79124B00EC3AFC /* Project object */;
 }

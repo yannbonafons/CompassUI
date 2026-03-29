@@ -12,27 +12,30 @@ CompassUI/
 ├── Sources/CompassUI/
 │   ├── Coordinators/
 │   │   ├── AppCoordinator/          # Top-level coordinator aggregating all sub-coordinators
-│   │   ├── Navigation/              # Push/pop navigation (NavigationStack)
+│   │   ├── Navigation/              # Push/pop navigation (NavigationStack) + NavigationContainerView
 │   │   ├── Sheet/                   # Stackable sheet presentation
 │   │   ├── Tab/                     # Tab selection management
-│   │   └── Alert/                   # Alert presentation with stacking support
-│   ├── Router/                      # RouterProtocol, RouterContext (facade over coordinators)
+│   │   ├── Alert/                   # Alert presentation with stacking support
+│   │   └── ExternalLinks/           # Deeplink & universal link handling (ExternalLinkRoute, ExternalLinkModifier)
+│   ├── Router/                      # Route, RouterProtocol, RouterContext (facade over coordinators)
 │   ├── Models/                      # AlertAction, TitleAndMessageType
 │   └── Helpers/                     # AnimatedCoordinator, HashableProtocol
 ├── Tests/CompassUITests/
-└── Example/FullNavigation/          # Demo app (separate Xcode project, imports CompassUI)
+└── ExampleNavigationApp/           # Demo app (separate Xcode project, imports CompassUI)
 ```
 
 ## Architecture
 
 ### Core Pattern: Coordinator + Route + Type Erasure
 
-1. **Routes** define destinations via protocols: `NavigationRoute`, `SheetRoute`, `TabRoute` (all extend `Route`)
+1. **Routes** define destinations via protocols: `NavigationRoute`, `SheetRoute`, `TabRoute`, `ExternalLinkRoute` (all extend `Route` or `SheetRoute`)
 2. Each route provides a `destinationView` and is `Hashable`
 3. Routes are type-erased (`erased()` → `AnyNavigationRoute`, `AnySheetRoute`, `AnyTabRoute`) for internal storage
 4. **Coordinators** manage state: `NavigationCoordinator` (path), `SheetCoordinator` (sheet stack), `TabCoordinator` (selected tab), `AlertCoordinator` (alert queue)
-5. **`RouterProtocol`** provides convenience methods (`push`, `pop`, `showSheet`, `hideSheet`, `selectTab`, `showAlert`) that delegate to the appropriate coordinator via `RouterContext`
+5. **`RouterProtocol`** provides convenience methods (`push`, `pop`, `popToRoot`, `showSheet`, `hideSheet`, `hideSheet(_ route:)`, `hideAll`, `selectTab`, `showAlert`) that delegate to the appropriate coordinator via `RouterContext`
 6. **`AppCoordinator`** groups `SheetCoordinator`, `AlertCoordinator`, and `TabCoordinator` as a single entry point
+7. **`NavigationContainerView`** wraps `NavigationStack` + `navigationDestination`, creates its own `NavigationCoordinator` and passes `RouterContext` to the content closure
+8. **`ExternalLinkRoute`** enables deeplink/universal link resolution — routes conforming to it implement `static func resolve(url:context:)` and are presented as sheets via `ExternalLinkModifier`
 
 ### Key Design Decisions
 
@@ -41,7 +44,9 @@ CompassUI/
 - **AnimatedCoordinator** protocol provides `execute(animated:action:)` to optionally disable animations via `withTransaction`
 - **HashableProtocol** provides identity-based `Equatable`/`Hashable` for reference-type coordinators
 - **Sheets are stackable** — `SheetStackModifier` recursively nests `.sheet` modifiers to support multiple stacked sheets
+- **`SheetCoordinatorProtocol`** (public) exposes `hideSheet()` for consumers; **`StackableSheetProtocol`** (public) exposes `sheetRoutes` for `SheetStackModifier`
 - **`AnyRoute` protocol** is internal; its `==` and `hash` must remain `public` because public types (`AnySheetRoute`) conform through it
+- **`RouterContext.mockValue`** provides a ready-made mock context for SwiftUI previews
 
 ### Access Control Convention
 
@@ -50,14 +55,20 @@ CompassUI/
 - `ActionInfo`, `ActionView` are `internal` — only used by `CustomAlertModifier`
 - Internal protocols (`AnyRoute`, `AnimatedCoordinator`, `HashableProtocol`) can have `public` extension methods when they provide conformance for public types
 
-## Example App (FullNavigation)
+## Example App (ExampleNavigationApp)
 
-The Example app demonstrates the library's usage pattern:
+Located at `ExampleNavigationApp/ExampleNavigationApp/`, this is a separate Xcode project that depends on the local CompassUI package.
 
-- **Builder pattern**: `BuilderProtocol` + `PayloadProtocol` for scene construction
-- **Router per scene**: Each scene has a dedicated router (e.g., `HomeRouter: RouterProtocol`) that encapsulates navigation logic
-- **Scene/ViewModel separation**: `HomeScene` (View) + `HomeSceneModel` (@Observable)
+Scenes: **Home**, **Info**, **Settings** (3 tabs via `TabItem` enum).
+
+### Patterns demonstrated
+
+- **Builder pattern**: `BuilderProtocol` + `PayloadProtocol` for scene construction — `PayloadProtocol` carries a `RouterContext` and is associated with a `BuilderType`
+- **Router per scene**: Each scene has a dedicated router protocol + struct (e.g., `HomeRouterProtocol` / `HomeRouter: RouterProtocol`) that encapsulates navigation logic
+- **Scene/SceneModel separation**: `HomeScene` (View) + `HomeSceneModel` (@Observable) — SceneModel holds the router protocol (not the concrete type) for testability
+- **ModalNavigationModifier**: `.asModal(coordinator:)` helper adds a cancel toolbar button to sheet-presented views
 - Routes are enums conforming to `NavigationRoute` or `SheetRoute`
+- Previews use `RouterContext.mockValue`
 
 ## Build & Test
 
@@ -71,7 +82,7 @@ swift test
 
 Or use Xcode: open `Package.swift`, build with Cmd+B, test with Cmd+U.
 
-The Example app (`Example/FullNavigation`) is a separate Xcode project that depends on the local package.
+The Example app (`ExampleNavigationApp/`) is a separate Xcode project that depends on the local package.
 
 ## Code Style
 
@@ -83,4 +94,4 @@ The Example app (`Example/FullNavigation`) is a separate Xcode project that depe
 - No force unwrapping
 - Prefer `let` over `var`
 - `public` only where necessary for cross-module access
-- ViewModifiers exposed via View extensions (e.g., `.stackableSheets(coordinator:)`, `.alert(coordinator:)`)
+- ViewModifiers exposed via View extensions (e.g., `.stackableSheets(coordinator:)`, `.alert(coordinator:)`, `.externalLinks(_:sheetCoordinator:alertCoordinator:tabCoordinator:)`)

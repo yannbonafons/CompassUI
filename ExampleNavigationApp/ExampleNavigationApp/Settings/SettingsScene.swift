@@ -1,6 +1,6 @@
 //
 //  SettingsPayload.swift
-//  FullNavigation
+//  CompassUI
 //
 //  Created by Yann Bonafons on 17/03/2026.
 //

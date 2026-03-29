@@ -1,6 +1,6 @@
 //
 //  TabItem.swift
-//  FullNavigation
+//  CompassUI
 //
 //  Created by Yann Bonafons on 16/03/2026.
 //

@@ -1,14 +1,14 @@
 //
-//  HomeRoute.swift
-//  FullNavigation
+//  SettingsRoute.swift
+//  CompassUI
 //
-//  Created by Yann Bonafons on 15/03/2026.
+//  Created by Yann Bonafons on 16/03/2026.
 //
 
 import SwiftUI
 import CompassUI
 
-enum HomeRoute: NavigationRoute {
+enum SettingsRoute: NavigationRoute {
     case info(infoPayload: InfoPayload)
 
     @ViewBuilder
@@ -20,20 +20,12 @@ enum HomeRoute: NavigationRoute {
     }
 }
 
-enum HomeSheetRoute: SheetRoute {
-    case home(homePayload: HomePayload)
+enum SettingsSheetRoute: SheetRoute {
     case info(infoPayload: InfoPayload)
 
     @ViewBuilder
     var destinationView: some View {
         switch self {
-        case .home(let payload):
-            NavigationContainerView(sheetCoordinator: payload.context.sheetCoordinator,
-                                    alertCoordinator: payload.context.alertCoordinator,
-                                    tabCoordinator: payload.context.tabCoordinator) { context in
-                HomeBuilder.createView(with: HomePayload(context: context))
-                    .asModal(coordinator: context.sheetCoordinator)
-            }
         case .info(let payload):
             NavigationContainerView(sheetCoordinator: payload.context.sheetCoordinator,
                                     alertCoordinator: payload.context.alertCoordinator,

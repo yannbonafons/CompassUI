@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  FullNavigation
+//  CompassUI
 //
 //  Created by Yann Bonafons on 15/03/2026.
 //

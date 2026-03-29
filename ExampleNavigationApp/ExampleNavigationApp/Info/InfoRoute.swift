@@ -1,6 +1,6 @@
 //
 //  InfoRoute.swift
-//  FullNavigation
+//  CompassUI
 //
 //  Created by Yann Bonafons on 24/03/2026.
 //

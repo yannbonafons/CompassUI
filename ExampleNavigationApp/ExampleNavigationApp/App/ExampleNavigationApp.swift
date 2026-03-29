@@ -1,6 +1,6 @@
 //
-//  FullNavigationApp.swift
-//  FullNavigation
+//  ExampleNavigationApp.swift
+//  CompassUI
 //
 //  Created by Yann Bonafons on 15/03/2026.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 import CompassUI
 
 @main
-struct ExampleNavigation​App: App {
+struct ExampleNavigationApp: App {
     @State var appCoordinator = AppCoordinator(selectedTab: TabItem.home,
                                                possibleTabs: TabItem.allCases)
     

@@ -1,6 +1,6 @@
 //
 //  ExampleNavigation_AppTests.swift
-//  ExampleNavigation​AppTests
+//  ExampleNavigationAppTests
 //
 //  Created by Yann Bonafons on 29/03/2026.
 //

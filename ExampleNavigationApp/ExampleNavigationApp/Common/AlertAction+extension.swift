@@ -1,6 +1,6 @@
 //
 //  AlertAction+extension.swift
-//  FullNavigation
+//  CompassUI
 //
 //  Created by Yann Bonafons on 27/03/2026.
 //
