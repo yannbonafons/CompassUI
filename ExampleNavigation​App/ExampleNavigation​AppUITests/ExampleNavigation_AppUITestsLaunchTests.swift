@@ -1,13 +1,13 @@
 //
-//  FullNavigationUITestsLaunchTests.swift
-//  FullNavigationUITests
+//  ExampleNavigation_AppUITestsLaunchTests.swift
+//  ExampleNavigation​AppUITests
 //
-//  Created by Yann Bonafons on 15/03/2026.
+//  Created by Yann Bonafons on 29/03/2026.
 //
 
 import XCTest
 
-final class FullNavigationUITestsLaunchTests: XCTestCase {
+final class ExampleNavigation_AppUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

@@ -9,7 +9,7 @@ import SwiftUI
 import NavigationLibrary
 
 @main
-struct FullNavigationApp: App {
+struct ExampleNavigation​App: App {
     @State var appCoordinator = AppCoordinator(selectedTab: TabItem.home,
                                                possibleTabs: TabItem.allCases)
     

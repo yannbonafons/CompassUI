@@ -1,13 +1,13 @@
 //
-//  FullNavigationUITests.swift
-//  FullNavigationUITests
+//  ExampleNavigation_AppUITests.swift
+//  ExampleNavigation​AppUITests
 //
-//  Created by Yann Bonafons on 15/03/2026.
+//  Created by Yann Bonafons on 29/03/2026.
 //
 
 import XCTest
 
-final class FullNavigationUITests: XCTestCase {
+final class ExampleNavigation_AppUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

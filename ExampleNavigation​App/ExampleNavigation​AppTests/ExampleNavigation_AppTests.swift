@@ -1,14 +1,14 @@
 //
-//  FullNavigationTests.swift
-//  FullNavigationTests
+//  ExampleNavigation_AppTests.swift
+//  ExampleNavigation​AppTests
 //
-//  Created by Yann Bonafons on 15/03/2026.
+//  Created by Yann Bonafons on 29/03/2026.
 //
 
 import Testing
-@testable import FullNavigation
+@testable import ExampleNavigation_App
 
-struct FullNavigationTests {
+struct ExampleNavigation_AppTests {
 
     @Test func example() async throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.

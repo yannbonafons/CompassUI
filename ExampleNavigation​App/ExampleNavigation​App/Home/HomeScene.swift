@@ -16,21 +16,24 @@ protocol HomeRouterProtocol {
 }
 
 struct HomeRouter: HomeRouterProtocol, RouterProtocol {
+    typealias NavigationRouteType = HomeRoute
+    typealias SheetRouteType = HomeSheetRoute
+    
     let context: RouterContext
 
     func showInfo(animated: Bool) {
         let infoPayload = InfoPayload(context: context)
-        showSheet(HomeSheetRoute.info(infoPayload: infoPayload), animated: animated)
+        showSheet(.info(infoPayload: infoPayload), animated: animated)
     }
 
     func pushInfo(animated: Bool) {
         let infoPayload = InfoPayload(context: context)
-        push(HomeRoute.info(infoPayload: infoPayload), animated: animated)
+        push(.info(infoPayload: infoPayload), animated: animated)
     }
 
     func showHome() {
         let homePayload = HomePayload(context: context)
-        showSheet(HomeSheetRoute.home(homePayload: homePayload))
+        showSheet(.home(homePayload: homePayload))
     }
 
     func close() {

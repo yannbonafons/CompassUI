@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import NavigationLibrary
 
 struct ModalNavigationModifier: ViewModifier {
     let coordinator: SheetCoordinatorProtocol

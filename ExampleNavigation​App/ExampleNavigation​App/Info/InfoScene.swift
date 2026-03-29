@@ -15,6 +15,9 @@ protocol InfoRouterProtocol {
 }
 
 struct InfoRouter: InfoRouterProtocol, RouterProtocol {
+    typealias NavigationRouteType = EmptyNavigationRoute
+    typealias SheetRouteType = InfoSheetRoute
+
     let context: RouterContext
 
     func close() {

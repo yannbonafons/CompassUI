@@ -16,11 +16,14 @@ protocol SettingsRouterProtocol {
 }
 
 struct SettingsRouter: SettingsRouterProtocol, RouterProtocol {
+    typealias NavigationRouteType = EmptyNavigationRoute
+    typealias SheetRouteType = SettingsSheetRoute
+
     let context: RouterContext
 
     func showInfo() {
         let infoPayload = InfoPayload(context:  context)
-        showSheet(SettingsSheetRoute.info(infoPayload: infoPayload))
+        showSheet(.info(infoPayload: infoPayload))
     }
     
     func goToHomeTab() {
