@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import NavigationLibrary
+import CompassUI
 
 enum SettingsRoute: NavigationRoute {
     case info(infoPayload: InfoPayload)

@@ -5,7 +5,7 @@
 //  Created by Yann Bonafons on 16/03/2026.
 //
 
-import NavigationLibrary
+import CompassUI
 
 enum TabItem: TabRoute, CaseIterable {
     case home

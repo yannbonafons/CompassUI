@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import NavigationLibrary
+import CompassUI
 
 protocol HomeRouterProtocol {
     func showInfo(animated: Bool)

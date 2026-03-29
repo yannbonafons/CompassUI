@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import NavigationLibrary
+import CompassUI
 
 protocol InfoRouterProtocol {
     func close()

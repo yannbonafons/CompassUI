@@ -1,12 +1,12 @@
 //
 //  ModalNavigationModifier.swift
-//  NavigationLibrary
+//  CompassUI
 //
 //  Created by Yann Bonafons on 19/03/2026.
 //
 
 import SwiftUI
-import NavigationLibrary
+import CompassUI
 
 struct ModalNavigationModifier: ViewModifier {
     let coordinator: SheetCoordinatorProtocol

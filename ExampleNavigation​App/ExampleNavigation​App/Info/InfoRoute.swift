@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import NavigationLibrary
+import CompassUI
 
 enum InfoSheetRoute: SheetRoute {
     case home(homePayload: HomePayload)

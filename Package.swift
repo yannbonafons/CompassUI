@@ -3,23 +3,23 @@
 import PackageDescription
 
 let package = Package(
-    name: "NavigationLibrary",
+    name: "CompassUI",
     platforms: [
         .iOS(.v18)
     ],
     products: [
         .library(
-            name: "NavigationLibrary",
-            targets: ["NavigationLibrary"]
+            name: "CompassUI",
+            targets: ["CompassUI"]
         ),
     ],
     targets: [
         .target(
-            name: "NavigationLibrary"
+            name: "CompassUI"
         ),
         .testTarget(
-            name: "NavigationLibraryTests",
-            dependencies: ["NavigationLibrary"]
+            name: "CompassUITests",
+            dependencies: ["CompassUI"]
         ),
     ]
 )

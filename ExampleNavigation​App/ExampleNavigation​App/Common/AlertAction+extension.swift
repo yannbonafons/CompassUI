@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import NavigationLibrary
+import CompassUI
 
 extension AlertAction {
     static func cancel(action: ((String) -> Void)? = nil) -> AlertAction {

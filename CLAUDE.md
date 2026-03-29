@@ -1,4 +1,4 @@
-# NavigationLibrary
+# CompassUI
 
 ## Project Overview
 
@@ -7,9 +7,9 @@ Swift Package Manager library providing a coordinator-based navigation system fo
 ## Repository Structure
 
 ```
-NavigationLibrary/
+CompassUI/
 ├── Package.swift                    # SPM manifest (iOS 18+, Swift 6.0)
-├── Sources/NavigationLibrary/
+├── Sources/CompassUI/
 │   ├── Coordinators/
 │   │   ├── AppCoordinator/          # Top-level coordinator aggregating all sub-coordinators
 │   │   ├── Navigation/              # Push/pop navigation (NavigationStack)
@@ -19,8 +19,8 @@ NavigationLibrary/
 │   ├── Router/                      # RouterProtocol, RouterContext (facade over coordinators)
 │   ├── Models/                      # AlertAction, TitleAndMessageType
 │   └── Helpers/                     # AnimatedCoordinator, HashableProtocol
-├── Tests/NavigationLibraryTests/
-└── Example/FullNavigation/          # Demo app (separate Xcode project, imports NavigationLibrary)
+├── Tests/CompassUITests/
+└── Example/FullNavigation/          # Demo app (separate Xcode project, imports CompassUI)
 ```
 
 ## Architecture
