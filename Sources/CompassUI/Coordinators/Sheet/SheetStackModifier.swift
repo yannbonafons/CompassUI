@@ -34,6 +34,8 @@ private struct SheetStackModifier<CoordinatorType: StackableSheetProtocol>: View
 }
 
 extension View {
+    /// Enables stackable sheet presentation. Apply once, high in the view hierarchy
+    /// (e.g., on the root `TabView`). Sheets stack on top of each other automatically.
     public func stackableSheets<CoordinatorType: StackableSheetProtocol>(coordinator: CoordinatorType) -> some View {
         self.modifier(SheetStackModifier(coordinator: coordinator, index: 0))
     }

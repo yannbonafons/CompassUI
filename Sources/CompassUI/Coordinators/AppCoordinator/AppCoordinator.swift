@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/// Top-level coordinator grouping sheet, alert, and tab coordinators.
+/// Use ``globalContext`` to pass all three at once to ``NavigationContainerView``
+/// and `.externalLinks`.
 @Observable
 public final class AppCoordinator {
     public var sheetCoordinator: SheetCoordinator

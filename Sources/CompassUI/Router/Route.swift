@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+/// Base protocol for all route types. Routes must be `Hashable` (required by `NavigationPath`).
+///
+/// **Payload best practice**: keep routes lightweight — pass identifiers (IDs, strings, enums),
+/// not full model objects. The destination view should resolve heavy data from a store/service.
+/// If you must carry a non-Hashable object, implement `Hashable` on a stable identity subset (e.g., `id`).
 public protocol Route: Hashable {
     associatedtype ViewType: View
 

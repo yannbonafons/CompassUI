@@ -5,10 +5,15 @@
 //  Created by Yann Bonafons on 24/03/2026.
 //
 
+/// Optional convenience layer over coordinators. Create one per scene/feature to get
+/// type-safe `push`, `pop`, `showSheet`, `selectTab`, `showAlert` methods
+/// scoped to that scene's route types.
+///
+/// You can always use coordinators directly via ``RouterContext`` instead.
 public protocol RouterProtocol: Hashable {
     associatedtype NavigationRouteType: NavigationRoute
     associatedtype SheetRouteType: SheetRoute
-    
+
     var context: RouterContext { get }
 }
 

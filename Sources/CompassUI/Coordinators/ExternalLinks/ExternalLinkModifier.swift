@@ -36,6 +36,7 @@ private struct ExternalLinkModifier<RouteType: ExternalLinkRoute>: ViewModifier 
 // MARK: - View Extension
 
 public extension View {
+    /// Handles deeplinks (`onOpenURL`) and universal links. Apply once at the root level.
     func externalLinks<RouteType: ExternalLinkRoute>(
         _ routeType: RouteType.Type,
         globalContext: RouterGlobalContext

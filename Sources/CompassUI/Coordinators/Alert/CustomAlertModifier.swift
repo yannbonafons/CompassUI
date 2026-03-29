@@ -45,6 +45,7 @@ private struct CustomAlertModifier<CoordinatorType: AlertCoordinatorProtocol>: V
 }
 
 extension View {
+    /// Enables alert presentation. Apply once, high in the view hierarchy (e.g., on the root `TabView`).
     public func alert<CoordinatorType: AlertCoordinatorProtocol>(coordinator: CoordinatorType) -> some View {
         modifier(CustomAlertModifier(coordinator: coordinator))
     }

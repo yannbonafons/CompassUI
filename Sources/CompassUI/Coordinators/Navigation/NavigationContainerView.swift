@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+/// SwiftUI equivalent of `UINavigationController`. Wraps a `NavigationStack` and creates
+/// its own ``NavigationCoordinator`` internally. The content closure receives a ``RouterContext``
+/// combining this local coordinator with the shared ``RouterGlobalContext``.
 public struct NavigationContainerView<RootViewType: View>: View {
     @State private var navigationCoordinator = NavigationCoordinator()
     private let globalContext: RouterGlobalContext

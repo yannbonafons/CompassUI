@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+/// A route pushed onto a `NavigationStack`. Define an enum case per destination,
+/// carrying only lightweight identifiers as associated values (not full model objects).
+///
+/// ```swift
+/// enum HomeRoute: NavigationRoute {
+///     case detail(itemId: String)
+///     case profile(userId: UUID)
+/// }
+/// ```
 public protocol NavigationRoute: Route {}
 
 /// Use this empty route to qualify a Router without any push / pop navigation

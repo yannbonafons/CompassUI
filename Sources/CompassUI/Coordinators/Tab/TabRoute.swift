@@ -5,6 +5,8 @@
 //  Created by Yann Bonafons on 27/03/2026.
 //
 
+/// Conform your tab enum to this protocol. Use `erased()` to get the type-erased
+/// value expected by `TabView(selection:)` and ``TabCoordinator``.
 public protocol TabRoute: Hashable {}
 
 extension TabRoute {

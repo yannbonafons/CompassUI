@@ -47,6 +47,15 @@ CompassUI/
 - **`SheetCoordinatorProtocol`** (public) exposes `hideSheet()` for consumers; **`StackableSheetProtocol`** (public) exposes `sheetRoutes` for `SheetStackModifier`
 - **`AnyRoute` protocol** is internal; its `==` and `hash` must remain `public` because public types (`AnySheetRoute`) conform through it
 - **`RouterContext.mockValue`** provides a ready-made mock context for SwiftUI previews
+- **`RouterGlobalContext`** groups app-level coordinators (sheet, alert, tab) — obtained via `AppCoordinator.globalContext` and passed to `NavigationContainerView` and `.externalLinks`
+
+### Route Hashable Constraint
+
+All routes must be `Hashable` (required by `NavigationPath`). Best practices for route payloads:
+
+- **Prefer identifiers** — pass `itemId: String` or `userId: UUID`, not full model objects. The destination view resolves heavy data from a store/service.
+- **If a non-Hashable payload is unavoidable**, implement `Hashable` based on a stable identity subset (e.g., the object's `id`), not the full object.
+- **Sheets are not affected** — `SheetCoordinator` type-erases routes via `AnySheetRoute` with identity-based hashing; the payload itself is not hashed.
 
 ### Access Control Convention
 
@@ -94,4 +103,4 @@ The Example app (`ExampleNavigationApp/`) is a separate Xcode project that depen
 - No force unwrapping
 - Prefer `let` over `var`
 - `public` only where necessary for cross-module access
-- ViewModifiers exposed via View extensions (e.g., `.stackableSheets(coordinator:)`, `.alert(coordinator:)`, `.externalLinks(_:sheetCoordinator:alertCoordinator:tabCoordinator:)`)
+- ViewModifiers exposed via View extensions (e.g., `.stackableSheets(coordinator:)`, `.alert(coordinator:)`, `.externalLinks(_:globalContext:)`)

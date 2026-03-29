@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+/// Manages the path of a single `NavigationStack`. Created automatically
+/// by ``NavigationContainerView`` — you rarely need to instantiate this yourself.
 @Observable
 public final class NavigationCoordinator: AnimatedCoordinator, HashableProtocol {
     public var path = NavigationPath()
