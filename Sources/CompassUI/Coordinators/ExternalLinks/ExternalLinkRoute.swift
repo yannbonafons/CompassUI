@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol ExternalLinkRoute: SheetRoute {
+public protocol ExternalLinkRoute: SheetRoute {
     static func resolve(url: URL, context: RouterContext) -> Self?
 }

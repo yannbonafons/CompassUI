@@ -21,12 +21,12 @@ struct InfoRouter: InfoRouterProtocol, RouterProtocol {
     let context: RouterContext
 
     func close() {
-        context.sheetCoordinator.hideSheet()
+        hideSheet()
     }
 
     func showHome() {
         let homePayload = HomePayload(context: context)
-        context.sheetCoordinator.showSheet(InfoSheetRoute.home(homePayload: homePayload))
+        showSheet(.home(homePayload: homePayload))
     }
     
     func goToSettingsTab() {

@@ -17,18 +17,14 @@ struct ExampleNavigationApp: App {
         WindowGroup {
             TabView(selection: $appCoordinator.tabCoordinator.selectedTab) {
                 Tab("Home", systemImage: "house", value: TabItem.home.erased()) {
-                    NavigationContainerView(sheetCoordinator: appCoordinator.sheetCoordinator,
-                                            alertCoordinator: appCoordinator.alertCoordinator,
-                                            tabCoordinator: appCoordinator.tabCoordinator) { context in
+                    NavigationContainerView(globalContext: appCoordinator.globalContext) { context in
                         HomeBuilder.createView(
                             with: HomePayload(context: context)
                         )
                     }
                 }
                 Tab("Settings", systemImage: "gear", value: TabItem.settings.erased()) {
-                    NavigationContainerView(sheetCoordinator: appCoordinator.sheetCoordinator,
-                                            alertCoordinator: appCoordinator.alertCoordinator,
-                                            tabCoordinator: appCoordinator.tabCoordinator) { context in
+                    NavigationContainerView(globalContext: appCoordinator.globalContext) { context in
                         SettingsBuilder.createView(
                             with: SettingsPayload(context: context)
                         )
@@ -37,6 +33,8 @@ struct ExampleNavigationApp: App {
             }
             .stackableSheets(coordinator: appCoordinator.sheetCoordinator)
             .alert(coordinator: appCoordinator.alertCoordinator)
+            .externalLinks(AppExternalLinkRoute.self,
+                           globalContext: appCoordinator.globalContext)
         }
     }
 }

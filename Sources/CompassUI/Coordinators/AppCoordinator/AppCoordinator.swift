@@ -22,4 +22,10 @@ public final class AppCoordinator {
         self.tabCoordinator = TabCoordinator(selectedTab: selectedTab.erased(),
                                              possibleTabs: possibleTabs.map({ $0.erased() }))
     }
+
+    public var globalContext: RouterGlobalContext {
+        RouterGlobalContext(sheetCoordinator: sheetCoordinator,
+                            alertCoordinator: alertCoordinator,
+                            tabCoordinator: tabCoordinator)
+    }
 }

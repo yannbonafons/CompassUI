@@ -8,18 +8,12 @@
 import SwiftUI
 
 private struct ExternalLinkModifier<RouteType: ExternalLinkRoute>: ViewModifier {
-    let sheetCoordinator: SheetCoordinator
-    let alertCoordinator: AlertCoordinator
-    let tabCoordinator: TabCoordinator
+    let globalContext: RouterGlobalContext
     @State private var navigationCoordinator = NavigationCoordinator()
 
     private var context: RouterContext {
-        RouterContext(
-            navigationCoordinator: navigationCoordinator,
-            sheetCoordinator: sheetCoordinator,
-            alertCoordinator: alertCoordinator,
-            tabCoordinator: tabCoordinator
-        )
+        RouterContext(navigationCoordinator: navigationCoordinator,
+                      globalContext: globalContext)
     }
 
     func body(content: Content) -> some View {
@@ -35,23 +29,17 @@ private struct ExternalLinkModifier<RouteType: ExternalLinkRoute>: ViewModifier 
 
     private func handle(_ url: URL) {
         guard let route = RouteType.resolve(url: url, context: context) else { return }
-        sheetCoordinator.showSheet(route)
+        globalContext.sheetCoordinator.showSheet(route)
     }
 }
 
 // MARK: - View Extension
 
-extension View {
+public extension View {
     func externalLinks<RouteType: ExternalLinkRoute>(
         _ routeType: RouteType.Type,
-        sheetCoordinator: SheetCoordinator,
-        alertCoordinator: AlertCoordinator,
-        tabCoordinator: TabCoordinator
+        globalContext: RouterGlobalContext
     ) -> some View {
-        modifier(ExternalLinkModifier<RouteType>(
-            sheetCoordinator: sheetCoordinator,
-            alertCoordinator: alertCoordinator,
-            tabCoordinator: tabCoordinator
-        ))
+        modifier(ExternalLinkModifier<RouteType>(globalContext: globalContext))
     }
 }

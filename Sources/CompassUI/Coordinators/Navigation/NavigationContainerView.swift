@@ -9,27 +9,17 @@ import SwiftUI
 
 public struct NavigationContainerView<RootViewType: View>: View {
     @State private var navigationCoordinator = NavigationCoordinator()
-    private let sheetCoordinator: SheetCoordinator
-    private let alertCoordinator: AlertCoordinator
-    private let tabCoordinator: TabCoordinator
+    private let globalContext: RouterGlobalContext
     private let contentView: (RouterContext) -> RootViewType
 
     private var routerContext: RouterContext {
-        RouterContext(
-            navigationCoordinator: navigationCoordinator,
-            sheetCoordinator: sheetCoordinator,
-            alertCoordinator: alertCoordinator,
-            tabCoordinator: tabCoordinator
-        )
+        RouterContext(navigationCoordinator: navigationCoordinator,
+                      globalContext: globalContext)
     }
 
-    public init(sheetCoordinator: SheetCoordinator,
-                alertCoordinator: AlertCoordinator,
-                tabCoordinator: TabCoordinator,
+    public init(globalContext: RouterGlobalContext,
                 @ViewBuilder contentView: @escaping (RouterContext) -> RootViewType) {
-        self.sheetCoordinator = sheetCoordinator
-        self.alertCoordinator = alertCoordinator
-        self.tabCoordinator = tabCoordinator
+        self.globalContext = globalContext
         self.contentView = contentView
     }
 

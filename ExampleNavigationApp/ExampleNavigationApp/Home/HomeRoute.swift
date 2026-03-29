@@ -28,16 +28,12 @@ enum HomeSheetRoute: SheetRoute {
     var destinationView: some View {
         switch self {
         case .home(let payload):
-            NavigationContainerView(sheetCoordinator: payload.context.sheetCoordinator,
-                                    alertCoordinator: payload.context.alertCoordinator,
-                                    tabCoordinator: payload.context.tabCoordinator) { context in
+            NavigationContainerView(globalContext: payload.context.globalContext) { context in
                 HomeBuilder.createView(with: HomePayload(context: context))
                     .asModal(coordinator: context.sheetCoordinator)
             }
         case .info(let payload):
-            NavigationContainerView(sheetCoordinator: payload.context.sheetCoordinator,
-                                    alertCoordinator: payload.context.alertCoordinator,
-                                    tabCoordinator: payload.context.tabCoordinator) { context in
+            NavigationContainerView(globalContext: payload.context.globalContext) { context in
                 InfoBuilder.createView(with: InfoPayload(context: context))
                     .asModal(coordinator: context.sheetCoordinator)
             }
