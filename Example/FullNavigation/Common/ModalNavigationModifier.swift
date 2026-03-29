@@ -27,11 +27,17 @@ struct CancelToolbarItem: ToolbarContent {
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button(role: .cancel, action: {
-                action()
-            }, label: {
-                Text("Cancel")
-            })
+            if #available(iOS 26.0, *) {
+                Button(role: .cancel) {
+                    action()
+                }
+            } else {
+                Button(role: .cancel, action: {
+                    action()
+                }, label: {
+                    Text("Cancel")
+                })
+            }
         }
     }
 }

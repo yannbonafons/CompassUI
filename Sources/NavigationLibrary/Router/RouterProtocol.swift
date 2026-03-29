@@ -6,11 +6,14 @@
 //
 
 public protocol RouterProtocol: Hashable {
+    associatedtype NavigationRouteType: NavigationRoute
+    associatedtype SheetRouteType: SheetRoute
+    
     var context: RouterContext { get }
 }
 
 extension RouterProtocol {
-    public func push<RouteType: NavigationRoute>(_ route: RouteType, animated: Bool = true) {
+    public func push(_ route: NavigationRouteType, animated: Bool = true) {
         context.navigationCoordinator.push(route, animated: animated)
     }
 
@@ -22,7 +25,7 @@ extension RouterProtocol {
         context.navigationCoordinator.popToRoot(animated: animated)
     }
 
-    public func showSheet<SheetRouteType: SheetRoute>(_ route: SheetRouteType, animated: Bool = true) {
+    public func showSheet(_ route: SheetRouteType, animated: Bool = true) {
         context.sheetCoordinator.showSheet(route, animated: animated)
     }
 
@@ -30,7 +33,7 @@ extension RouterProtocol {
         context.sheetCoordinator.hideSheet(animated: animated)
     }
 
-    public func hideSheet<SheetRouteType: SheetRoute>(_ route: SheetRouteType, animated: Bool = true) {
+    public func hideSheet(_ route: SheetRouteType, animated: Bool = true) {
         context.sheetCoordinator.hideSheet(route, animated: animated)
     }
 

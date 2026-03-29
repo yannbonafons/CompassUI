@@ -17,6 +17,13 @@ extension SheetRoute {
     }
 }
 
+/// Use this empty route to qualify a Router without any sheet navigation
+public struct EmptySheetRoute: SheetRoute {
+    public var destinationView: EmptyView {
+        EmptyView()
+    }
+}
+
 public struct AnySheetRoute: AnyRoute {
     public let id: AnyHashable
     let configuration: SheetConfiguration
