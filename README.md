@@ -79,18 +79,18 @@ enum HomeRoute: NavigationRoute {
 }
 ```
 
-**Sheet routes** (modal):
+**Sheet routes** (modal) — the `RouterContext` must be forwarded so the new navigation stack shares the same global coordinators:
 
 ```swift
 enum HomeSheetRoute: SheetRoute {
-    case settings
+    case settings(context: RouterContext)
 
     @ViewBuilder
     var destinationView: some View {
         switch self {
-        case .settings:
-            NavigationContainerView(globalContext: /* ... */) { context in
-                SettingsView()
+        case .settings(let context):
+            NavigationContainerView(globalContext: context.globalContext) { context in
+                SettingsView(context: context)
                     .asModal(coordinator: context.sheetCoordinator)
             }
         }
@@ -98,7 +98,21 @@ enum HomeSheetRoute: SheetRoute {
 }
 ```
 
-### 4. Create a Router (optional but recommended)
+### 4. Forward the context between screens
+
+`RouterContext` must be passed from screen to screen so that every view shares the same coordinators. How you forward it is up to you — via a payload struct, `@Environment`, or any other mechanism.
+
+```swift
+// Screen A pushes Screen B → forward the context
+func showDetail(itemId: String) {
+    let payload = DetailPayload(itemId: itemId, context: context)
+    push(.detail(payload: payload))
+}
+```
+
+When opening a **new navigation** (e.g., a sheet), pass `context.globalContext` to `NavigationContainerView`. It will create a fresh `NavigationCoordinator` and provide a new `RouterContext` in its closure.
+
+### 5. Create a Router (optional but recommended)
 
 `RouterProtocol` provides typed convenience methods (`push`, `pop`, `showSheet`, `hideSheet`, `selectTab`, `showAlert`...) that delegate to the appropriate coordinator. Create one per scene for clean separation.
 
@@ -121,7 +135,7 @@ struct HomeRouter: RouterProtocol {
 
 You can also use the coordinators directly via `RouterContext` if you don't need the typed convenience layer.
 
-### 5. Show alerts
+### 6. Show alerts
 
 Alerts are displayed one at a time. If `showAlert` is called while an alert is already visible, the new one is queued and shown after the current one is dismissed.
 
@@ -196,7 +210,7 @@ enum AppExternalLinkRoute: ExternalLinkRoute {
 
 ## Previews
 
-Use `RouterContext.mockValue` or `RouterGlobalContext.mockValue` for SwiftUI previews:
+Use `RouterContext.mockValue` for SwiftUI previews:
 
 ```swift
 #Preview {
