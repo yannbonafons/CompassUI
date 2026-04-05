@@ -34,14 +34,14 @@ struct InfoRouter: InfoRouterProtocol, RouterProtocol {
     }
 }
 
-struct InfoPayload: PayloadProtocol {
+struct InfoPayload: @MainActor PayloadProtocol {
     typealias BuilderType = InfoBuilder
 
     let initialName = "Info"
     let context: RouterContext
 }
 
-struct InfoBuilder: BuilderProtocol {
+struct InfoBuilder: @MainActor BuilderProtocol {
     static func createView(with payload: InfoPayload) -> some View {
         let router = InfoRouter(context: payload.context)
         let infoSceneModel = InfoSceneModel(sceneName: payload.initialName,

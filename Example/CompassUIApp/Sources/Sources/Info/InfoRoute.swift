@@ -8,7 +8,7 @@
 import SwiftUI
 import CompassUI
 
-enum InfoSheetRoute: SheetRoute {
+enum InfoSheetRoute: @MainActor SheetRoute {
     case home(homePayload: HomePayload)
 
     @ViewBuilder

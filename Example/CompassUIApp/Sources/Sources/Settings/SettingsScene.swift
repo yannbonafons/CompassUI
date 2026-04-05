@@ -60,13 +60,13 @@ struct SettingsRouter: SettingsRouterProtocol, RouterProtocol {
     }
 }
 
-struct SettingsPayload: PayloadProtocol {
+struct SettingsPayload: @MainActor PayloadProtocol {
     typealias BuilderType = SettingsBuilder
 
     let context: RouterContext
 }
 
-struct SettingsBuilder: BuilderProtocol {
+struct SettingsBuilder: @MainActor BuilderProtocol {
     static func createView(with payload: SettingsPayload) -> some View {
         let settingsRouter = SettingsRouter(context: payload.context)
         let settingsSceneModel = SettingsSceneModel(router: settingsRouter)
