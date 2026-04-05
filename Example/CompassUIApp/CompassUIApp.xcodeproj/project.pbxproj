@@ -15,9 +15,33 @@
 		57F5512C6651C7DAE2F19929 /* CompassUIApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CompassUIApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6BDE43122F82D8CC00DCE6AB /* Exceptions for "Sources" folder in "CompassUIApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				App/AppExternalLinkRoute.swift,
+				App/CompassUIApp.swift,
+				App/TabItem.swift,
+				"Common/AlertAction+extension.swift",
+				Common/BuilderProtocol.swift,
+				Common/ModalNavigationModifier.swift,
+				Home/HomeRoute.swift,
+				Home/HomeScene.swift,
+				Info/InfoRoute.swift,
+				Info/InfoScene.swift,
+				Settings/SettingsRoute.swift,
+				Settings/SettingsScene.swift,
+			);
+			target = 6FF56558D7E94C56570FACEB /* CompassUIApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6BDE41882F82B57500DCE6AB /* Sources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6BDE43122F82D8CC00DCE6AB /* Exceptions for "Sources" folder in "CompassUIApp" target */,
+			);
 			path = Sources;
 			sourceTree = "<group>";
 		};
@@ -138,7 +162,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -280,7 +304,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

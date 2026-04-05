@@ -41,13 +41,13 @@ struct HomeRouter: HomeRouterProtocol, RouterProtocol {
     }
 }
 
-struct HomePayload: PayloadProtocol {
+struct HomePayload: @MainActor PayloadProtocol {
     typealias BuilderType = HomeBuilder
 
     let context: RouterContext
 }
 
-struct HomeBuilder: BuilderProtocol {
+struct HomeBuilder: @MainActor BuilderProtocol {
     static func createView(with payload: HomePayload) -> some View {
         let router = HomeRouter(context: payload.context)
         let homeSceneModel = HomeSceneModel(router: router)

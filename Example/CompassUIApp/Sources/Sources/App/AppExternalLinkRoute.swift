@@ -8,7 +8,7 @@
 import SwiftUI
 import CompassUI
 
-enum AppExternalLinkRoute: ExternalLinkRoute {
+enum AppExternalLinkRoute: @MainActor ExternalLinkRoute {
     case info(infoPayload: InfoPayload)
 
     static func resolve(url: URL, context: RouterContext) -> Self? {
