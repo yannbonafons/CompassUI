@@ -11,7 +11,7 @@ protocol AnimatedCoordinator {}
 
 extension AnimatedCoordinator {
     func execute(animated: Bool = true,
-                        action: () -> Void) {
+                 action: () -> Void) {
         if animated {
             action()
         } else {
