@@ -22,13 +22,17 @@ private struct ExternalLinkModifier<RouteType: ExternalLinkRoute>: ViewModifier 
                 handle(url)
             }
             .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { activity in
-                guard let url = activity.webpageURL else { return }
+                guard let url = activity.webpageURL else {
+                    return
+                }
                 handle(url)
             }
     }
 
     private func handle(_ url: URL) {
-        guard let route = RouteType.resolve(url: url, context: context) else { return }
+        guard let route = RouteType.resolve(url: url, context: context) else {
+            return
+        }
         globalContext.sheetCoordinator.showSheet(route)
     }
 }

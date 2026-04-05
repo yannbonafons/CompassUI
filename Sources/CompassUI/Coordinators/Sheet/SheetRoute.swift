@@ -20,22 +20,16 @@ extension SheetRoute {
 }
 
 /// Use this empty route to qualify a Router without any sheet navigation
-public struct EmptySheetRoute: SheetRoute {
+public struct EmptySheetRoute: @MainActor SheetRoute {
     public var destinationView: EmptyView {
         EmptyView()
     }
 }
 
-public struct AnySheetRoute: AnyRoute {
+public struct AnySheetRoute: @MainActor AnyRoute {
     public let id: AnyHashable
     let configuration: SheetConfiguration
     let destinationView: AnyView
-
-    init(id: AnyHashable, configuration: SheetConfiguration, destinationView: AnyView) {
-        self.id = id
-        self.configuration = configuration
-        self.destinationView = destinationView
-    }
 }
 
 extension SheetRoute {

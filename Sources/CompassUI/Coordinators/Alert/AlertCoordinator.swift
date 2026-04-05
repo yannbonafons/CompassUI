@@ -16,7 +16,7 @@ public protocol AlertCoordinatorProtocol: AnyObject, Observable {
 /// Displays one alert at a time. If ``showAlert(_:)`` is called while an alert is already visible,
 /// the new alert is queued and will appear once the current one is dismissed.
 @Observable
-public class AlertCoordinator: HashableProtocol, AlertCoordinatorProtocol {
+public class AlertCoordinator: @MainActor HashableProtocol, AlertCoordinatorProtocol {
     var alertConfigurations: [AlertConfiguration] = []
     public var alertConfiguration: AlertConfiguration? {
         alertConfigurations.last

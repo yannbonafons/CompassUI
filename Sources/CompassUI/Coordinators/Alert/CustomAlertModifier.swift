@@ -9,7 +9,7 @@ import SwiftUI
 
 private struct CustomAlertModifier<CoordinatorType: AlertCoordinatorProtocol>: ViewModifier {
     @Bindable var coordinator: CoordinatorType
-    @State var text: String = ""
+    @State private var text: String = ""
 
     func body(content: Content) -> some View {
         if let conf = coordinator.alertConfiguration {

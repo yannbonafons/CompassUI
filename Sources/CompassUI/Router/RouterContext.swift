@@ -28,7 +28,7 @@ public struct RouterContext: Hashable {
     }
 
     public static var mockValue: RouterContext {
-        enum MockTable: TabRoute, CaseIterable {
+        enum MockTable: @MainActor TabRoute, CaseIterable {
             case tab
         }
         return RouterContext(
@@ -55,7 +55,7 @@ public struct RouterGlobalContext: Hashable {
     }
 
     public static var mockValue: RouterGlobalContext {
-        enum MockTable: TabRoute, CaseIterable {
+        enum MockTable: @MainActor TabRoute, CaseIterable {
             case tab
         }
         return RouterGlobalContext(

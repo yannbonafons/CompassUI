@@ -8,7 +8,7 @@
 import SwiftUI
 
 @Observable
-public class TabCoordinator: HashableProtocol {
+public class TabCoordinator: @MainActor HashableProtocol {
     public var selectedTab: AnyTabRoute
     public private(set) var possibleTabs: [AnyTabRoute]
 

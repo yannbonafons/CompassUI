@@ -7,7 +7,7 @@ CompassUI provides a set of coordinators that manage push navigation, stackable 
 ## Requirements
 
 - iOS 17+
-- Swift 6.0
+- Swift 6.2
 - Xcode 26+
 
 ## Installation

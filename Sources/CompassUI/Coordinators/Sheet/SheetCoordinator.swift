@@ -19,7 +19,7 @@ public protocol SheetCoordinatorProtocol {
 /// Shared across the app via ``AppCoordinator`` — apply `.stackableSheets(coordinator:)`
 /// once at the root level (e.g., on your `TabView`).
 @Observable
-public final class SheetCoordinator: SheetCoordinatorProtocol, StackableSheetProtocol, AnimatedCoordinator, HashableProtocol {
+public final class SheetCoordinator: SheetCoordinatorProtocol, StackableSheetProtocol, AnimatedCoordinator, @MainActor HashableProtocol {
     public var sheetRoutes: [AnySheetRoute] = []
 
     public init() {}

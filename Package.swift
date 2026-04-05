@@ -1,5 +1,4 @@
-// swift-tools-version: 6.0
-
+// swift-tools-version: 6.2
 import PackageDescription
 
 let package = Package(
@@ -13,13 +12,32 @@ let package = Package(
             targets: ["CompassUI"]
         ),
     ],
+    dependencies: [
+        .package(url: "https://github.com/realm/SwiftLint", from: "0.57.0"),
+    ],
     targets: [
         .target(
-            name: "CompassUI"
+            name: "CompassUI",
+            swiftSettings: [
+                .enableExperimentalFeature("ApproachableConcurrency"),
+                .defaultIsolation(MainActor.self),
+                .swiftLanguageMode(.v6)
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")
+            ]
         ),
         .testTarget(
             name: "CompassUITests",
-            dependencies: ["CompassUI"]
+            dependencies: ["CompassUI"],
+            swiftSettings: [
+                .enableExperimentalFeature("ApproachableConcurrency"),
+                .defaultIsolation(MainActor.self),
+                .swiftLanguageMode(.v6)
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLint")
+            ]
         ),
     ]
 )
