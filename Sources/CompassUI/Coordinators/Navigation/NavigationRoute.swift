@@ -19,20 +19,15 @@ import SwiftUI
 public protocol NavigationRoute: Route {}
 
 /// Use this empty route to qualify a Router without any push / pop navigation
-public struct EmptyNavigationRoute: NavigationRoute {
+public struct EmptyNavigationRoute: @MainActor NavigationRoute {
     public var destinationView: EmptyView {
         EmptyView()
     }
 }
 
-struct AnyNavigationRoute: AnyRoute {
+struct AnyNavigationRoute: @MainActor AnyRoute {
     let id: AnyHashable
     let destinationView: AnyView
-
-    init(id: AnyHashable, destinationView: AnyView) {
-        self.id = id
-        self.destinationView = destinationView
-    }
 }
 
 extension NavigationRoute {

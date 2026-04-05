@@ -5,7 +5,6 @@
 //  Created by Yann Bonafons on 27/03/2026.
 //
 
-
 import SwiftUI
 
 protocol HashableProtocol: AnyObject, Hashable {}
