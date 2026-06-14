@@ -10,7 +10,7 @@ import SwiftUI
 @Observable
 public class TabCoordinator: @MainActor HashableProtocol {
     public var selectedTab: AnyTabRoute
-    public private(set) var possibleTabs: [AnyTabRoute]
+    private var possibleTabs: [AnyTabRoute]
 
     public init(selectedTab: AnyTabRoute,
                 possibleTabs: [AnyTabRoute]) {
@@ -24,5 +24,10 @@ public class TabCoordinator: @MainActor HashableProtocol {
             return
         }
         selectedTab = erasedRoute
+    }
+
+    public func isTabAvailable<TabRouteType: TabRoute>(_ route: TabRouteType) -> Bool {
+        let erasedRoute = route.erased()
+        return possibleTabs.contains(erasedRoute)
     }
 }
