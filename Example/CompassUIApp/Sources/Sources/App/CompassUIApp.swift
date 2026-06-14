@@ -16,18 +16,22 @@ struct ExampleNavigationApp: App {
     var body: some Scene {
         WindowGroup {
             TabView(selection: $appCoordinator.tabCoordinator.selectedTab) {
-                Tab("Home", systemImage: "house", value: TabItem.home.erased()) {
-                    NavigationContainerView(globalContext: appCoordinator.globalContext) { context in
-                        HomeBuilder.createView(
-                            with: HomePayload(context: context)
-                        )
+                if (appCoordinator.tabCoordinator.isTabAvailable(TabItem.home)) {
+                    Tab("Home", systemImage: "house", value: TabItem.home.erased()) {
+                        NavigationContainerView(globalContext: appCoordinator.globalContext) { context in
+                            HomeBuilder.createView(
+                                with: HomePayload(context: context)
+                            )
+                        }
                     }
                 }
-                Tab("Settings", systemImage: "gear", value: TabItem.settings.erased()) {
-                    NavigationContainerView(globalContext: appCoordinator.globalContext) { context in
-                        SettingsBuilder.createView(
-                            with: SettingsPayload(context: context)
-                        )
+                if (appCoordinator.tabCoordinator.isTabAvailable(TabItem.settings)) {
+                    Tab("Settings", systemImage: "gear", value: TabItem.settings.erased()) {
+                        NavigationContainerView(globalContext: appCoordinator.globalContext) { context in
+                            SettingsBuilder.createView(
+                                with: SettingsPayload(context: context)
+                            )
+                        }
                     }
                 }
             }
