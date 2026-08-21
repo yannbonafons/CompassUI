@@ -15,7 +15,7 @@ protocol HomeRouterProtocol {
     func showHome()
 }
 
-struct HomeRouter: HomeRouterProtocol, RouterProtocol {
+struct HomeRouter: HomeRouterProtocol, @MainActor RouterProtocol {
     typealias NavigationRouteType = HomeRoute
     typealias SheetRouteType = HomeSheetRoute
     

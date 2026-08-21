@@ -7,7 +7,7 @@
 
 import CompassUI
 
-enum TabItem: TabRoute, CaseIterable {
+enum TabItem: @MainActor TabRoute, CaseIterable {
     case home
     case settings
 }
