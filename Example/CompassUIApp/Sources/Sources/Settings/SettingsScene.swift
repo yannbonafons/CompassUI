@@ -16,8 +16,9 @@ protocol SettingsRouterProtocol {
 }
 
 struct SettingsRouter: SettingsRouterProtocol, @MainActor RouterProtocol {
-    typealias NavigationRouteType = EmptyNavigationRoute
+    typealias NavigationRouteType = EmptyRoute
     typealias SheetRouteType = SettingsSheetRoute
+    typealias SplitRouteType = EmptyRoute
 
     let context: RouterContext
 

@@ -15,7 +15,8 @@ protocol InfoRouterProtocol {
 }
 
 struct InfoRouter: InfoRouterProtocol, @MainActor RouterProtocol {
-    typealias NavigationRouteType = EmptyNavigationRoute
+    typealias NavigationRouteType = EmptyRoute
+    typealias SplitRouteType = EmptyRoute
     typealias SheetRouteType = InfoSheetRoute
 
     let context: RouterContext

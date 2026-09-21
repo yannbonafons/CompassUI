@@ -8,6 +8,29 @@
 import SwiftUI
 import CompassUI
 
+enum HomeSplitRoute: @MainActor SplitRoute {
+    case home(homePayload: HomePayload)
+    case info(infoPayload: InfoPayload)
+
+    @ViewBuilder
+    var destinationView: some View {
+        switch self {
+        case .home(let payload):
+            NavigationContainerView { navigationCoordinator in
+                HomeBuilder.createView(with: HomePayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
+                                                                                globalContext: payload.context.globalContext)))
+                .asModal(coordinator: payload.context.sheetCoordinator)
+            }
+        case .info(let payload):
+            NavigationContainerView { navigationCoordinator in
+                InfoBuilder.createView(with: InfoPayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
+                                                                                globalContext: payload.context.globalContext)))
+                .asModal(coordinator: payload.context.sheetCoordinator)
+            }
+        }
+    }
+}
+
 enum HomeRoute: @MainActor NavigationRoute {
     case info(infoPayload: InfoPayload)
 
@@ -28,14 +51,16 @@ enum HomeSheetRoute: @MainActor SheetRoute {
     var destinationView: some View {
         switch self {
         case .home(let payload):
-            NavigationContainerView(globalContext: payload.context.globalContext) { context in
-                HomeBuilder.createView(with: HomePayload(context: context))
-                    .asModal(coordinator: context.sheetCoordinator)
+            NavigationContainerView { navigationCoordinator in
+                HomeBuilder.createView(with: HomePayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
+                                                                                globalContext: payload.context.globalContext)))
+                    .asModal(coordinator: payload.context.sheetCoordinator)
             }
         case .info(let payload):
-            NavigationContainerView(globalContext: payload.context.globalContext) { context in
-                InfoBuilder.createView(with: InfoPayload(context: context))
-                    .asModal(coordinator: context.sheetCoordinator)
+            NavigationContainerView { navigationCoordinator in
+                InfoBuilder.createView(with: InfoPayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
+                                                                                globalContext: payload.context.globalContext)))
+                    .asModal(coordinator: payload.context.sheetCoordinator)
             }
         }
     }

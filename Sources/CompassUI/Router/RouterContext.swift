@@ -9,6 +9,7 @@
 /// Provided by ``NavigationContainerView`` through its content closure.
 public struct RouterContext: Hashable {
     public let navigationCoordinator: NavigationCoordinator
+    public let splitCoordinator: SplitCoordinator?
     public let sheetCoordinator: SheetCoordinator
     public let alertCoordinator: AlertCoordinator
     public let tabCoordinator: TabCoordinator
@@ -20,8 +21,10 @@ public struct RouterContext: Hashable {
     }
 
     public init(navigationCoordinator: NavigationCoordinator,
+                splitCoordinator: SplitCoordinator? = nil,
                 globalContext: RouterGlobalContext) {
         self.navigationCoordinator = navigationCoordinator
+        self.splitCoordinator = splitCoordinator
         self.sheetCoordinator = globalContext.sheetCoordinator
         self.alertCoordinator = globalContext.alertCoordinator
         self.tabCoordinator = globalContext.tabCoordinator

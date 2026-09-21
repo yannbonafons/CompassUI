@@ -13,11 +13,16 @@
 public protocol RouterProtocol: Hashable {
     associatedtype NavigationRouteType: NavigationRoute
     associatedtype SheetRouteType: SheetRoute
+    associatedtype SplitRouteType: SplitRoute
 
     var context: RouterContext { get }
 }
 
 extension RouterProtocol {
+    typealias NavigationRouteType = EmptyRoute
+    typealias SheetRouteType = EmptyRoute
+    typealias SplitRouteType = EmptyRoute
+
     public func push(_ route: NavigationRouteType, animated: Bool = true) {
         context.navigationCoordinator.push(route, animated: animated)
     }
@@ -52,5 +57,13 @@ extension RouterProtocol {
 
     public func showAlert(_ alertConfiguration: AlertConfiguration) {
         context.alertCoordinator.showAlert(alertConfiguration)
+    }
+    
+    public func showDetail(_ route: SplitRouteType, animated: Bool = false) {
+        context.splitCoordinator?.show(route, animated: animated)
+    }
+
+    public func dismissDetail(animated: Bool = false) {
+        context.splitCoordinator?.dismissDetail(animated: animated)
     }
 }
