@@ -15,9 +15,10 @@ protocol SettingsRouterProtocol {
     func showDoubleAlert()
 }
 
-struct SettingsRouter: SettingsRouterProtocol, RouterProtocol {
-    typealias NavigationRouteType = EmptyNavigationRoute
+struct SettingsRouter: SettingsRouterProtocol, @MainActor RouterProtocol {
+    typealias NavigationRouteType = EmptyRoute
     typealias SheetRouteType = SettingsSheetRoute
+    typealias SplitRouteType = EmptyRoute
 
     let context: RouterContext
 

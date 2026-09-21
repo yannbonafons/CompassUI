@@ -27,9 +27,10 @@ enum SettingsSheetRoute: @MainActor SheetRoute {
     var destinationView: some View {
         switch self {
         case .info(let payload):
-            NavigationContainerView(globalContext: payload.context.globalContext) { context in
-                InfoBuilder.createView(with: InfoPayload(context: context))
-                    .asModal(coordinator: context.sheetCoordinator)
+            NavigationContainerView { navigationCoordinator in
+                InfoBuilder.createView(with: InfoPayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
+                                                                                globalContext: payload.context.globalContext)))
+                .asModal(coordinator: payload.context.sheetCoordinator)
             }
         }
     }

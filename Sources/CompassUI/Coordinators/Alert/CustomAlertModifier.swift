@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+/// Backing view modifier for `.alert(coordinator:)`. Renders the coordinator's current
+/// ``AlertConfiguration`` as a native SwiftUI alert, forwarding the optional text field value.
 private struct CustomAlertModifier<CoordinatorType: AlertCoordinatorProtocol>: ViewModifier {
     @Bindable var coordinator: CoordinatorType
     @State private var text: String = ""

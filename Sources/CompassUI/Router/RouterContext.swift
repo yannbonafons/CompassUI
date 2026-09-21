@@ -9,10 +9,14 @@
 /// Provided by ``NavigationContainerView`` through its content closure.
 public struct RouterContext: Hashable {
     public let navigationCoordinator: NavigationCoordinator
+    /// The split coordinator for the enclosing `NavigationSplitView`, or `nil` when this context
+    /// isn't scoped to one (i.e., not provided by ``SplitContainerView``).
+    public let splitCoordinator: SplitCoordinator?
     public let sheetCoordinator: SheetCoordinator
     public let alertCoordinator: AlertCoordinator
     public let tabCoordinator: TabCoordinator
 
+    /// The app-level coordinators (sheet, alert, tab) extracted from this context.
     public var globalContext: RouterGlobalContext {
         RouterGlobalContext(sheetCoordinator: sheetCoordinator,
                             alertCoordinator: alertCoordinator,
@@ -20,13 +24,16 @@ public struct RouterContext: Hashable {
     }
 
     public init(navigationCoordinator: NavigationCoordinator,
+                splitCoordinator: SplitCoordinator? = nil,
                 globalContext: RouterGlobalContext) {
         self.navigationCoordinator = navigationCoordinator
+        self.splitCoordinator = splitCoordinator
         self.sheetCoordinator = globalContext.sheetCoordinator
         self.alertCoordinator = globalContext.alertCoordinator
         self.tabCoordinator = globalContext.tabCoordinator
     }
 
+    /// A ready-made context for use in SwiftUI previews.
     public static var mockValue: RouterContext {
         enum MockTable: @MainActor TabRoute, CaseIterable {
             case tab
@@ -54,6 +61,7 @@ public struct RouterGlobalContext: Hashable {
         self.tabCoordinator = tabCoordinator
     }
 
+    /// A ready-made global context for use in SwiftUI previews.
     public static var mockValue: RouterGlobalContext {
         enum MockTable: @MainActor TabRoute, CaseIterable {
             case tab

@@ -7,10 +7,14 @@
 
 import SwiftUI
 
+/// Exposes the current sheet stack for rendering by ``SheetStackModifier``.
 public protocol StackableSheetProtocol: AnyObject, Observable {
+    /// The currently presented sheets, ordered from the bottom of the stack to the top.
     var sheetRoutes: [AnySheetRoute] { get set }
 }
 
+/// Minimal interface for dismissing the top-most sheet, exposed to consumers that only
+/// need to close their own sheet (e.g., via ``ModalNavigationModifier``-style helpers).
 public protocol SheetCoordinatorProtocol {
     func hideSheet()
 }
@@ -24,16 +28,19 @@ public final class SheetCoordinator: SheetCoordinatorProtocol, StackableSheetPro
 
     public init() {}
 
+    /// Presents `route` as a sheet, stacked on top of any sheet already presented.
     public func showSheet<SheetRouteType: SheetRoute>(_ route: SheetRouteType, animated: Bool = true) {
         execute(animated: animated) {
             sheetRoutes.append(route.erased())
         }
     }
 
+    /// Dismisses the top-most sheet. No-ops (and logs) if no sheet is presented.
     public func hideSheet() {
         hideSheet(animated: true)
     }
 
+    /// Dismisses the top-most sheet. No-ops (and logs) if no sheet is presented.
     public func hideSheet(animated: Bool) {
         execute(animated: animated) {
             if !sheetRoutes.isEmpty {
@@ -54,6 +61,7 @@ public final class SheetCoordinator: SheetCoordinatorProtocol, StackableSheetPro
         }
     }
 
+    /// Dismisses every currently presented sheet.
     public func hideAll(animated: Bool = true) {
         execute(animated: animated) {
             sheetRoutes = []

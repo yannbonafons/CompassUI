@@ -11,19 +11,32 @@ import CompassUI
 protocol HomeRouterProtocol {
     func showInfo(animated: Bool)
     func pushInfo(animated: Bool)
+    func showInfoAsDetail()
+    func showHomeAsDetail()
     func close()
     func showHome()
 }
 
-struct HomeRouter: HomeRouterProtocol, RouterProtocol {
+struct HomeRouter: HomeRouterProtocol, @MainActor RouterProtocol {
     typealias NavigationRouteType = HomeRoute
     typealias SheetRouteType = HomeSheetRoute
-    
+    typealias SplitRouteType = HomeSplitRoute
+
     let context: RouterContext
 
     func showInfo(animated: Bool) {
         let infoPayload = InfoPayload(context: context)
         showSheet(.info(infoPayload: infoPayload), animated: animated)
+    }
+
+    func showInfoAsDetail() {
+        let infoPayload = InfoPayload(context: context)
+        showDetail(.info(infoPayload: infoPayload))
+    }
+
+    func showHomeAsDetail() {
+        let homePayload = HomePayload(context: context)
+        showDetail(.home(homePayload: homePayload))
     }
 
     func pushInfo(animated: Bool) {
@@ -63,6 +76,15 @@ class HomeSceneModel {
         self.router = router
     }
     
+    func showInfoAsDetail() {
+        router.showInfoAsDetail()
+    }
+    
+    func showHomeAsDetail() {
+        router.showHomeAsDetail()
+    }
+
+    
     func pushInfo() {
         router.pushInfo(animated: true)
     }
@@ -97,6 +119,15 @@ struct HomeScene: View {
                 .imageScale(.large)
                 .foregroundStyle(.tint)
             Text("Hello, world!")
+            Button("Info detail") {
+                homeSceneModel.showInfoAsDetail()
+            }
+            Button("Home detail") {
+                homeSceneModel.showHomeAsDetail()
+            }
+            Button("Push Info") {
+                homeSceneModel.pushInfo()
+            }
             Button("Push Info") {
                 homeSceneModel.pushInfo()
             }

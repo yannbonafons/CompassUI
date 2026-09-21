@@ -2,7 +2,7 @@
 
 A coordinator-based navigation library for SwiftUI.
 
-CompassUI provides a set of coordinators that manage push navigation, stackable sheets, alerts with queuing, tab selection, and deeplink handling — all built on `@Observable` with no Combine dependency.
+CompassUI provides a set of coordinators that manage push navigation, stackable sheets, split view management, alerts with queuing, tab selection, and deeplink handling — all built on `@Observable` with no Combine dependency.
 
 ## Requirements
 
@@ -112,14 +112,33 @@ func showDetail(itemId: String) {
 
 When opening a **new navigation** (e.g., a sheet), pass `context.globalContext` to `NavigationContainerView`. It will create a fresh `NavigationCoordinator` and provide a new `RouterContext` in its closure.
 
+**Split routes** (detail column of a `NavigationSplitView`):
+
+```swift
+enum HomeSplitRoute: SplitRoute {
+    case detail(itemId: String)
+
+    @ViewBuilder
+    var destinationView: some View {
+        switch self {
+        case .detail(let itemId):
+            DetailView(itemId: itemId)
+        }
+    }
+}
+```
+
 ### 5. Create a Router (optional but recommended)
 
-`RouterProtocol` provides typed convenience methods (`push`, `pop`, `showSheet`, `hideSheet`, `selectTab`, `showAlert`...) that delegate to the appropriate coordinator. Create one per scene for clean separation.
+`RouterProtocol` provides typed convenience methods (`push`, `pop`, `showSheet`, `hideSheet`, `selectTab`, `showAlert`, `showDetail`, `dismissDetail`...) that delegate to the appropriate coordinator. Create one per scene for clean separation.
+
+Associated types default to `EmptyRoute` — a no-op route conforming to `SheetRoute`, `NavigationRoute`, and `SplitRoute` at once — so a router only needs to specify the route types it actually uses.
 
 ```swift
 struct HomeRouter: RouterProtocol {
     typealias NavigationRouteType = HomeRoute
     typealias SheetRouteType = HomeSheetRoute
+    // SplitRouteType defaults to EmptyRoute since this scene doesn't use a split view
 
     let context: RouterContext
 
@@ -154,6 +173,20 @@ router.showAlert(AlertConfiguration(
 ))
 ```
 
+### 7. Manage a split view (sidebar + detail)
+
+`SplitContainerView` is the split-view equivalent of `NavigationContainerView`: it wraps a `NavigationSplitView` (sidebar + detail only, for now) and creates its own `SplitCoordinator`, driving the detail column from `SplitCoordinator.selectedRoute`.
+
+```swift
+SplitContainerView(HomeSplitRoute.self) { splitCoordinator in
+    SidebarView(splitCoordinator: splitCoordinator, context: context)
+} emptyView: {
+    AnyView(Text("Select an item"))
+}
+```
+
+Call `router.showDetail(.detail(itemId: itemId))` to populate the detail column, and `router.dismissDetail()` to clear it back to the empty placeholder. Both are provided by `RouterProtocol` and delegate to `RouterContext.splitCoordinator`, which is only set when the context originates from a `SplitContainerView` (`nil` otherwise, in which case these calls are no-ops).
+
 ## Architecture Overview
 
 ```
@@ -164,13 +197,18 @@ AppCoordinator (app-level)
         ↓ RouterGlobalContext
 NavigationContainerView (one per tab)
 └── NavigationCoordinator — push/pop navigation stack
-        ↓ RouterContext (global + navigation)
+        ↓ RouterContext (global + navigation [+ split])
+
+SplitContainerView (sidebar + detail)
+└── SplitCoordinator      — selected detail route
+        ↓ RouterContext (global + navigation + split)
 ```
 
 - **`RouterGlobalContext`** = sheet + alert + tab coordinators, shared across all navigation stacks
-- **`RouterContext`** = `RouterGlobalContext` + `NavigationCoordinator`, scoped to a single navigation stack
+- **`RouterContext`** = `RouterGlobalContext` + `NavigationCoordinator` + optional `SplitCoordinator`, scoped to a single navigation (and, optionally, split) stack
 - **Sheets stack** on top of each other (managed at the `TabView` level, not per-screen)
 - **Type erasure is internal** — you work with typed routes, never with `Any*Route`
+- **`EmptyRoute`** is a no-op route conforming to `SheetRoute`, `NavigationRoute`, and `SplitRoute` at once — used as the default associated type in `RouterProtocol` so a router only declares the route types it actually needs
 
 ## Route Payloads & Hashable
 

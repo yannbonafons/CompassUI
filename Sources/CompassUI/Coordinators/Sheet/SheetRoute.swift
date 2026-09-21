@@ -19,13 +19,7 @@ extension SheetRoute {
     }
 }
 
-/// Use this empty route to qualify a Router without any sheet navigation
-public struct EmptySheetRoute: @MainActor SheetRoute {
-    public var destinationView: EmptyView {
-        EmptyView()
-    }
-}
-
+/// Type-erased ``SheetRoute``, used internally by ``SheetCoordinator`` to store the sheet stack.
 public struct AnySheetRoute: @MainActor AnyRoute {
     public let id: AnyHashable
     let configuration: SheetConfiguration

@@ -14,8 +14,9 @@ protocol InfoRouterProtocol {
     func goToSettingsTab()
 }
 
-struct InfoRouter: InfoRouterProtocol, RouterProtocol {
-    typealias NavigationRouteType = EmptyNavigationRoute
+struct InfoRouter: InfoRouterProtocol, @MainActor RouterProtocol {
+    typealias NavigationRouteType = EmptyRoute
+    typealias SplitRouteType = EmptyRoute
     typealias SheetRouteType = InfoSheetRoute
 
     let context: RouterContext
