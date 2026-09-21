@@ -14,8 +14,10 @@ CompassUI/
 │   │   ├── AppCoordinator/          # Top-level coordinator aggregating all sub-coordinators
 │   │   ├── Navigation/              # Push/pop navigation (NavigationStack) + NavigationContainerView
 │   │   ├── Sheet/                   # Stackable sheet presentation
+│   │   ├── Split/                   # NavigationSplitView management (sidebar + detail) + SplitContainerView
 │   │   ├── Tab/                     # Tab selection management
 │   │   ├── Alert/                   # Alert presentation with stacking support
+│   │   ├── EmptyRoute/              # No-op route conforming to Sheet/Navigation/Split routes at once
 │   │   └── ExternalLinks/           # Deeplink & universal link handling (ExternalLinkRoute, ExternalLinkModifier)
 │   ├── Router/                      # Route, RouterProtocol, RouterContext (facade over coordinators)
 │   ├── Models/                      # AlertAction, TitleAndMessageType
@@ -28,14 +30,16 @@ CompassUI/
 
 ### Core Pattern: Coordinator + Route + Type Erasure
 
-1. **Routes** define destinations via protocols: `NavigationRoute`, `SheetRoute`, `TabRoute`, `ExternalLinkRoute` (all extend `Route` or `SheetRoute`)
+1. **Routes** define destinations via protocols: `NavigationRoute`, `SheetRoute`, `SplitRoute`, `TabRoute`, `ExternalLinkRoute` (all extend `Route` or `SheetRoute`)
 2. Each route provides a `destinationView` and is `Hashable`
-3. Routes are type-erased (`erased()` → `AnyNavigationRoute`, `AnySheetRoute`, `AnyTabRoute`) for internal storage
-4. **Coordinators** manage state: `NavigationCoordinator` (path), `SheetCoordinator` (sheet stack), `TabCoordinator` (selected tab), `AlertCoordinator` (alert queue)
-5. **`RouterProtocol`** provides convenience methods (`push`, `pop`, `popToRoot`, `showSheet`, `hideSheet`, `hideSheet(_ route:)`, `hideAll`, `selectTab`, `showAlert`) that delegate to the appropriate coordinator via `RouterContext`
+3. Routes are type-erased (`erased()` → `AnyNavigationRoute`, `AnySheetRoute`, `AnySplitRoute`, `AnyTabRoute`) for internal storage
+4. **Coordinators** manage state: `NavigationCoordinator` (path), `SheetCoordinator` (sheet stack), `SplitCoordinator` (selected detail route), `TabCoordinator` (selected tab), `AlertCoordinator` (alert queue)
+5. **`RouterProtocol`** provides convenience methods (`push`, `pop`, `popToRoot`, `showSheet`, `hideSheet`, `hideSheet(_ route:)`, `hideAll`, `selectTab`, `showAlert`, `showDetail`, `dismissDetail`) that delegate to the appropriate coordinator via `RouterContext`
 6. **`AppCoordinator`** groups `SheetCoordinator`, `AlertCoordinator`, and `TabCoordinator` as a single entry point
 7. **`NavigationContainerView`** wraps `NavigationStack` + `navigationDestination`, creates its own `NavigationCoordinator` and passes `RouterContext` to the content closure
-8. **`ExternalLinkRoute`** enables deeplink/universal link resolution — routes conforming to it implement `static func resolve(url:context:)` and are presented as sheets via `ExternalLinkModifier`
+8. **`SplitContainerView`** wraps `NavigationSplitView` (sidebar + detail only, for now), creates its own `SplitCoordinator` and drives the detail column from `SplitCoordinator.selectedRoute`
+9. **`ExternalLinkRoute`** enables deeplink/universal link resolution — routes conforming to it implement `static func resolve(url:context:)` and are presented as sheets via `ExternalLinkModifier`
+10. **`EmptyRoute`** is a no-op route conforming to `SheetRoute`, `NavigationRoute`, and `SplitRoute` at once — it's the default associated type in `RouterProtocol`, so a router only needs to specify the route types it actually uses
 
 ### Key Design Decisions
 
@@ -45,9 +49,11 @@ CompassUI/
 - **HashableProtocol** provides identity-based `Equatable`/`Hashable` for reference-type coordinators
 - **Sheets are stackable** — `SheetStackModifier` recursively nests `.sheet` modifiers to support multiple stacked sheets
 - **`SheetCoordinatorProtocol`** (public) exposes `hideSheet()` for consumers; **`StackableSheetProtocol`** (public) exposes `sheetRoutes` for `SheetStackModifier`
-- **`AnyRoute` protocol** is internal; its `==` and `hash` must remain `public` because public types (`AnySheetRoute`) conform through it
+- **`AnyRoute` protocol** is internal; its `==` and `hash` must remain `public` because public types (`AnySheetRoute`, `AnySplitRoute`) conform through it
 - **`RouterContext.mockValue`** provides a ready-made mock context for SwiftUI previews
 - **`RouterGlobalContext`** groups app-level coordinators (sheet, alert, tab) — obtained via `AppCoordinator.globalContext` and passed to `NavigationContainerView` and `.externalLinks`
+- **`RouterContext.splitCoordinator`** is optional — only set when the context originates from a `SplitContainerView`; `RouterProtocol.showDetail`/`dismissDetail` no-op when it's `nil`
+- **Split management is sidebar + detail only for now** — no support yet for a third (content) column
 
 ### Route Hashable Constraint
 
@@ -61,6 +67,7 @@ All routes must be `Hashable` (required by `NavigationPath`). Best practices for
 
 - `public` only on types/members that the consumer module needs
 - Type-erased wrappers (`AnyNavigationRoute`) and `erased()` methods are `internal` — they're implementation details
+- **Exception**: `AnySheetRoute` and `AnySplitRoute` are `public` because they're exposed through public coordinator state (`SheetCoordinator.sheetRoutes`, `SplitCoordinator.selectedRoute`)
 - `ActionInfo`, `ActionView` are `internal` — only used by `CustomAlertModifier`
 - Internal protocols (`AnyRoute`, `AnimatedCoordinator`, `HashableProtocol`) can have `public` extension methods when they provide conformance for public types
 
@@ -104,3 +111,4 @@ The Example app (`ExampleNavigationApp/`) is a separate Xcode project that depen
 - Prefer `let` over `var`
 - `public` only where necessary for cross-module access
 - ViewModifiers exposed via View extensions (e.g., `.stackableSheets(coordinator:)`, `.alert(coordinator:)`, `.externalLinks(_:globalContext:)`)
+- `SplitContainerView` is used directly as a view (not a modifier) since it wraps `NavigationSplitView` itself, the same way `NavigationContainerView` wraps `NavigationStack`

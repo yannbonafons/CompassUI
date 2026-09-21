@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+/// Provides identity-based (`ObjectIdentifier`) `Equatable`/`Hashable` conformance for
+/// reference-type coordinators, so two distinct instances are never considered equal.
 protocol HashableProtocol: AnyObject, Hashable {}
 
 extension HashableProtocol {

@@ -7,9 +7,12 @@
 
 import SwiftUI
 
+/// Exposes the currently visible alert and allows dismissing it.
 public protocol AlertCoordinatorProtocol: AnyObject, Observable {
+    /// The alert currently presented, or `nil` if none is visible.
     var alertConfiguration: AlertConfiguration? { get }
 
+    /// Dismisses the currently visible alert.
     func hideAlert()
 }
 
@@ -24,10 +27,13 @@ public class AlertCoordinator: @MainActor HashableProtocol, AlertCoordinatorProt
 
     public init() {}
 
+    /// Queues `alertConfiguration` for presentation. Shown immediately if no alert is
+    /// currently visible, otherwise displayed once the current one is dismissed.
     public func showAlert(_ alertConfiguration: AlertConfiguration) {
         alertConfigurations.insert(alertConfiguration, at: 0)
     }
 
+    /// Dismisses the currently visible alert. No-ops (and logs) if no alert is visible.
     public func hideAlert() {
         if !alertConfigurations.isEmpty {
             alertConfigurations.removeLast()

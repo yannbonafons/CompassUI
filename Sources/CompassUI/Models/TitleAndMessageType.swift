@@ -7,11 +7,13 @@
 
 import SwiftUI
 
+/// The title and/or message displayed by an alert presented via ``AlertCoordinator``.
 public enum TitleAndMessageType {
     case message(message: LocalizedStringResource)
     case title(title: LocalizedStringResource)
     case messageAndTitle(message: LocalizedStringResource, title: LocalizedStringResource)
 
+    /// The message component, or `nil` if this case carries no message.
     public var message: LocalizedStringResource? {
         switch self {
         case .message(let message):
@@ -23,6 +25,7 @@ public enum TitleAndMessageType {
         }
     }
 
+    /// The title component, or `nil` if this case carries no title.
     public var title: LocalizedStringResource? {
         switch self {
         case .message:

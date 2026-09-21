@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Internal representation of an alert action's icon and/or text, rendered by ``ActionView``.
 enum ActionInfo {
     case text(LocalizedStringResource)
     case image(String)

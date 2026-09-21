@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Renders the icon and/or text described by an ``ActionInfo``.
 struct ActionView: View {
     let actionInfo: ActionInfo
 

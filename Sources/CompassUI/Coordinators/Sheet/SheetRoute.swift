@@ -19,6 +19,7 @@ extension SheetRoute {
     }
 }
 
+/// Type-erased ``SheetRoute``, used internally by ``SheetCoordinator`` to store the sheet stack.
 public struct AnySheetRoute: @MainActor AnyRoute {
     public let id: AnyHashable
     let configuration: SheetConfiguration
