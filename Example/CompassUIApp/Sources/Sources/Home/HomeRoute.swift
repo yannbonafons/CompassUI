@@ -19,13 +19,11 @@ enum HomeSplitRoute: @MainActor SplitRoute {
             NavigationContainerView { navigationCoordinator in
                 HomeBuilder.createView(with: HomePayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
                                                                                 globalContext: payload.context.globalContext)))
-                .asModal(coordinator: payload.context.sheetCoordinator)
             }
         case .info(let payload):
             NavigationContainerView { navigationCoordinator in
                 InfoBuilder.createView(with: InfoPayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
                                                                                 globalContext: payload.context.globalContext)))
-                .asModal(coordinator: payload.context.sheetCoordinator)
             }
         }
     }

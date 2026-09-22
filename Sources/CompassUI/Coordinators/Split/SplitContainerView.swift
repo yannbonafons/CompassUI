@@ -28,7 +28,10 @@ public struct SplitContainerView<SplitRouteType: SplitRoute,
     }
 
     public var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(preferredCompactColumn: Binding(
+            get: { splitCoordinator.preferredCompactColumn },
+            set: { splitCoordinator.preferredCompactColumn = $0 }
+        )) {
             sidebarView(splitCoordinator)
         } detail: {
             if let route = splitCoordinator.selectedRoute {
