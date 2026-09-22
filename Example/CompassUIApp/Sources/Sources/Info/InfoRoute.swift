@@ -18,7 +18,6 @@ enum InfoSheetRoute: @MainActor SheetRoute {
             NavigationContainerView { navigationCoordinator in
                 HomeBuilder.createView(with: HomePayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
                                                                                 globalContext: payload.context.globalContext)))
-                .asModal(coordinator: payload.context.sheetCoordinator)
             }
         }
     }
