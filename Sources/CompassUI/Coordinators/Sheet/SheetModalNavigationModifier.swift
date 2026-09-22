@@ -7,46 +7,33 @@
 
 import SwiftUI
 
-private struct SheetCloseCoordinatorKey: EnvironmentKey {
-    static let defaultValue: SheetCoordinatorProtocol? = nil
-}
-
-extension EnvironmentValues {
-    /// Set by ``SheetStackModifier`` on the whole sheet route; consumed by ``NavigationContainerView``
-    /// on its root content, since `.toolbar` only renders when applied inside the `NavigationStack`.
-    var sheetCloseCoordinator: SheetCoordinatorProtocol? {
-        get { self[SheetCloseCoordinatorKey.self] }
-        set { self[SheetCloseCoordinatorKey.self] = newValue }
-    }
-}
-
 private struct SheetModalNavigationModifier: ViewModifier {
-    @Environment(\.sheetCloseCoordinator) private var coordinator
+    let coordinator: SheetCoordinatorProtocol
 
     func body(content: Content) -> some View {
-        if let coordinator {
+        VStack {
             content
-                .toolbar {
-                    CancelToolbarItem(coordinator: coordinator)
-                }
-        } else {
-            content
+        }
+        .toolbar {
+            CancelToolbarItem {
+                coordinator.hideSheet()
+            }
         }
     }
 }
 
-private struct CancelToolbarItem: ToolbarContent {
-    let coordinator: SheetCoordinatorProtocol
+struct CancelToolbarItem: ToolbarContent {
+    let action: @MainActor () -> Void
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
             if #available(iOS 26.0, *) {
                 Button(role: .cancel) {
-                    coordinator.hideSheet()
+                    action()
                 }
             } else {
                 Button(role: .cancel, action: {
-                    coordinator.hideSheet()
+                    action()
                 }, label: {
                     Text("Cancel")
                 })
@@ -58,7 +45,7 @@ private struct CancelToolbarItem: ToolbarContent {
 extension View {
     /// Renders the cancellation toolbar button set via ``EnvironmentValues/sheetCloseCoordinator``, if any.
     /// Must be applied inside a `NavigationStack` for the button to render in the nav bar.
-    func asModal() -> some View {
-        self.modifier(SheetModalNavigationModifier())
+    func asModal(coordinator: SheetCoordinatorProtocol) -> some View {
+        self.modifier(SheetModalNavigationModifier(coordinator: coordinator))
     }
 }
