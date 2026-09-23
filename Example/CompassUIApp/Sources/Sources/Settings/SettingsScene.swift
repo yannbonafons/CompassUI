@@ -23,7 +23,7 @@ struct SettingsRouter: SettingsRouterProtocol, @MainActor RouterProtocol {
     let context: RouterContext
 
     func showInfo() {
-        let infoPayload = InfoPayload(context:  context)
+        let infoPayload = InfoPayload(context: context)
         showSheet(.info(infoPayload: infoPayload))
     }
     

@@ -20,25 +20,38 @@ public protocol AlertCoordinatorProtocol: AnyObject, Observable {
 /// the new alert is queued and will appear once the current one is dismissed.
 @Observable
 public class AlertCoordinator: @MainActor HashableProtocol, AlertCoordinatorProtocol {
-    var alertConfigurations: [AlertConfiguration] = []
-    public var alertConfiguration: AlertConfiguration? {
-        alertConfigurations.last
-    }
+    /// Alerts waiting to be shown, in the order they were queued.
+    private var queuedAlertConfigurations: [AlertConfiguration] = []
+    public private(set) var alertConfiguration: AlertConfiguration?
 
     public init() {}
 
     /// Queues `alertConfiguration` for presentation. Shown immediately if no alert is
     /// currently visible, otherwise displayed once the current one is dismissed.
     public func showAlert(_ alertConfiguration: AlertConfiguration) {
-        alertConfigurations.insert(alertConfiguration, at: 0)
+        if self.alertConfiguration == nil {
+            self.alertConfiguration = alertConfiguration
+        } else {
+            queuedAlertConfigurations.append(alertConfiguration)
+        }
     }
 
     /// Dismisses the currently visible alert. No-ops (and logs) if no alert is visible.
     public func hideAlert() {
-        if !alertConfigurations.isEmpty {
-            alertConfigurations.removeLast()
-        } else {
-            print("No sheet")
+        guard alertConfiguration != nil else {
+            print("No alert")
+            return
+        }
+        alertConfiguration = nil
+        guard !queuedAlertConfigurations.isEmpty else {
+            return
+        }
+        let next = queuedAlertConfigurations.removeFirst()
+        // SwiftUI can't re-present a boolean-driven `.alert` in the same update cycle
+        // it was just dismissed in — wait for the dismiss animation to finish first.
+        Task {
+            try? await Task.sleep(for: .milliseconds(50))
+            self.alertConfiguration = next
         }
     }
 }
