@@ -32,6 +32,7 @@ struct ExampleNavigationApp: App {
                             )
                         }
                     }
+                    .navigationSplitViewStyle(.balanced)
                 }
             }
             if (appCoordinator.tabCoordinator.isTabAvailable(TabItem.settings)) {

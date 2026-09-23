@@ -23,7 +23,7 @@ struct SettingsRouter: SettingsRouterProtocol, @MainActor RouterProtocol {
     let context: RouterContext
 
     func showInfo() {
-        let infoPayload = InfoPayload(context:  context)
+        let infoPayload = InfoPayload(context: context)
         showSheet(.info(infoPayload: infoPayload))
     }
     
@@ -40,7 +40,7 @@ struct SettingsRouter: SettingsRouterProtocol, @MainActor RouterProtocol {
                                      ]))
         
         Task {
-            try? await Task.sleep(for: .seconds(1))
+            try? await Task.sleep(for: .seconds(0.2))
             showAlert(AlertConfiguration(titleAndMessageType: .messageAndTitle(message: "Im the second alert",
                                                                                title: "TWO"),
                                          actions: [

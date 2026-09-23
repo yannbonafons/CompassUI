@@ -54,15 +54,17 @@ struct InfoBuilder: @MainActor BuilderProtocol {
 struct InfoScene: View {
     @State var infoSceneModel: InfoSceneModel
     var body: some View {
-        Text(infoSceneModel.sceneName)
-        Button("Close") {
-            infoSceneModel.close()
-        }
-        Button("Show Home") {
-            infoSceneModel.showHome()
-        }
-        Button("Tab Settings") {
-            infoSceneModel.router.goToSettingsTab()
+        VStack {
+            Text(infoSceneModel.sceneName)
+            Button("Close") {
+                infoSceneModel.close()
+            }
+            Button("Show Home") {
+                infoSceneModel.showHome()
+            }
+            Button("Tab Settings") {
+                infoSceneModel.router.goToSettingsTab()
+            }
         }
     }
 }
