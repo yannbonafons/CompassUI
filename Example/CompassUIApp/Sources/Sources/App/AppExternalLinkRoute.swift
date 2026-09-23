@@ -30,7 +30,6 @@ enum AppExternalLinkRoute: @MainActor ExternalLinkRoute {
             NavigationContainerView { navigationCoordinator in
                 InfoBuilder.createView(with: InfoPayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
                                                                                 globalContext: payload.context.globalContext)))
-                .asModal(coordinator: payload.context.sheetCoordinator)
             }
         }
     }

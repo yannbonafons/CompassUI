@@ -24,7 +24,6 @@
 				App/TabItem.swift,
 				"Common/AlertAction+extension.swift",
 				Common/BuilderProtocol.swift,
-				Common/ModalNavigationModifier.swift,
 				Home/HomeRoute.swift,
 				Home/HomeScene.swift,
 				Info/InfoRoute.swift,

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-private struct SheetStackModifier<CoordinatorType: StackableSheetProtocol>: ViewModifier {
+private struct SheetStackModifier<CoordinatorType: StackableSheetProtocol & SheetCoordinatorProtocol>: ViewModifier {
     @Bindable var coordinator: CoordinatorType
     let index: Int
 
@@ -25,6 +25,7 @@ private struct SheetStackModifier<CoordinatorType: StackableSheetProtocol>: View
                 }
             )) { route in
                 route.destinationView
+                    .environment(\.sheetCloseCoordinator, route.configuration.showsCloseButton ? coordinator : nil)
                     .presentationDetents(route.configuration.detents)
                     // We forward the same coordinator to the next view
                     .modifier(SheetStackModifier<CoordinatorType>(coordinator: coordinator,
@@ -36,7 +37,7 @@ private struct SheetStackModifier<CoordinatorType: StackableSheetProtocol>: View
 extension View {
     /// Enables stackable sheet presentation. Apply once, high in the view hierarchy
     /// (e.g., on the root `TabView`). Sheets stack on top of each other automatically.
-    public func stackableSheets<CoordinatorType: StackableSheetProtocol>(coordinator: CoordinatorType) -> some View {
+    public func stackableSheets<CoordinatorType: StackableSheetProtocol & SheetCoordinatorProtocol>(coordinator: CoordinatorType) -> some View {
         self.modifier(SheetStackModifier(coordinator: coordinator, index: 0))
     }
 }
