@@ -14,7 +14,7 @@ CompassUI/
 │   │   ├── AppCoordinator/          # Top-level coordinator aggregating all sub-coordinators
 │   │   ├── Navigation/              # Push/pop navigation (NavigationStack) + NavigationContainerView
 │   │   ├── Sheet/                   # Stackable sheet presentation
-│   │   ├── Split/                   # NavigationSplitView management (sidebar + detail) + SplitContainerView
+│   │   ├── Split/                   # NavigationSplitView management (sidebar + content + detail) + SplitContainerView
 │   │   ├── Tab/                     # Tab selection management
 │   │   ├── Alert/                   # Alert presentation with stacking support
 │   │   ├── EmptyRoute/              # No-op route conforming to Sheet/Navigation/Split routes at once
@@ -33,11 +33,11 @@ CompassUI/
 1. **Routes** define destinations via protocols: `NavigationRoute`, `SheetRoute`, `SplitRoute`, `TabRoute`, `ExternalLinkRoute` (all extend `Route` or `SheetRoute`)
 2. Each route provides a `destinationView` and is `Hashable`
 3. Routes are type-erased (`erased()` → `AnyNavigationRoute`, `AnySheetRoute`, `AnySplitRoute`, `AnyTabRoute`) for internal storage
-4. **Coordinators** manage state: `NavigationCoordinator` (path), `SheetCoordinator` (sheet stack), `SplitCoordinator` (selected detail route), `TabCoordinator` (selected tab), `AlertCoordinator` (alert queue)
-5. **`RouterProtocol`** provides convenience methods (`push`, `pop`, `popToRoot`, `showSheet`, `hideSheet`, `hideSheet(_ route:)`, `hideAll`, `selectTab`, `showAlert`, `showDetail`, `dismissDetail`) that delegate to the appropriate coordinator via `RouterContext`
+4. **Coordinators** manage state: `NavigationCoordinator` (path), `SheetCoordinator` (sheet stack), `SplitCoordinator` (selected content/detail routes), `TabCoordinator` (selected tab), `AlertCoordinator` (alert queue)
+5. **`RouterProtocol`** provides convenience methods (`push`, `pop`, `popToRoot`, `showSheet`, `hideSheet`, `hideSheet(_ route:)`, `hideAll`, `selectTab`, `showAlert`, `showContent`, `dismissContent`, `showDetail`, `dismissDetail`) that delegate to the appropriate coordinator via `RouterContext`
 6. **`AppCoordinator`** groups `SheetCoordinator`, `AlertCoordinator`, and `TabCoordinator` as a single entry point
 7. **`NavigationContainerView`** wraps `NavigationStack` + `navigationDestination`, creates its own `NavigationCoordinator` and passes `RouterContext` to the content closure
-8. **`SplitContainerView`** wraps `NavigationSplitView` (sidebar + detail only, for now), creates its own `SplitCoordinator` and drives the detail column from `SplitCoordinator.selectedRoute`
+8. **`SplitContainerView`** wraps `NavigationSplitView` with two initializers mirroring the native ones (sidebar + detail, or sidebar + content + detail), creates its own `SplitCoordinator` and drives the content/detail columns from `SplitCoordinator.selectedContentRoute`/`selectedDetailRoute`
 9. **`ExternalLinkRoute`** enables deeplink/universal link resolution — routes conforming to it implement `static func resolve(url:context:)` and are presented as sheets via `ExternalLinkModifier`
 10. **`EmptyRoute`** is a no-op route conforming to `SheetRoute`, `NavigationRoute`, and `SplitRoute` at once — it's the default associated type in `RouterProtocol`, so a router only needs to specify the route types it actually uses
 
@@ -52,8 +52,8 @@ CompassUI/
 - **`AnyRoute` protocol** is internal; its `==` and `hash` must remain `public` because public types (`AnySheetRoute`, `AnySplitRoute`) conform through it
 - **`RouterContext.mockValue`** provides a ready-made mock context for SwiftUI previews
 - **`RouterGlobalContext`** groups app-level coordinators (sheet, alert, tab) — obtained via `AppCoordinator.globalContext` and passed to `NavigationContainerView` and `.externalLinks`
-- **`RouterContext.splitCoordinator`** is optional — only set when the context originates from a `SplitContainerView`; `RouterProtocol.showDetail`/`dismissDetail` no-op when it's `nil`
-- **Split management is sidebar + detail only for now** — no support yet for a third (content) column
+- **`RouterContext.splitCoordinator`** is optional — only set when the context originates from a `SplitContainerView`; `RouterProtocol.showContent`/`dismissContent`/`showDetail`/`dismissDetail` no-op when it's `nil`
+- **The content column is optional** — the two-column `SplitContainerView` init takes a single `emptyView:` placeholder; the three-column init takes distinct `contentEmptyView:`/`detailEmptyView:` placeholders (both default to `EmptyView`). `SplitCoordinator` keeps `preferredCompactColumn` in sync: `showContent` → `.content`, `showDetail` → `.detail`, `dismissDetail` → `.content` if a content route is shown else `.sidebar`, `dismissContent` → `.sidebar` (and clears the detail, which depends on the content)
 
 ### Route Hashable Constraint
 

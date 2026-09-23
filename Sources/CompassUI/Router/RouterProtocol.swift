@@ -25,10 +25,6 @@ public protocol RouterProtocol: Hashable {
 }
 
 extension RouterProtocol {
-    typealias NavigationRouteType = EmptyRoute
-    typealias SheetRouteType = EmptyRoute
-    typealias SplitRouteType = EmptyRoute
-
     /// Pushes `route` onto the enclosing `NavigationStack`.
     public func push(_ route: NavigationRouteType, animated: Bool = true) {
         context.navigationCoordinator.push(route, animated: animated)
@@ -74,10 +70,21 @@ extension RouterProtocol {
         context.alertCoordinator.showAlert(alertConfiguration)
     }
 
+    /// Displays `route` in the content column of the enclosing `NavigationSplitView`.
+    /// No-ops if this context isn't scoped to a ``SplitCoordinator`` (i.e., not provided by ``SplitContainerView``).
+    public func showContent(_ route: SplitRouteType, animated: Bool = false) {
+        context.splitCoordinator?.showContent(route, animated: animated)
+    }
+
+    /// Clears the content column (and the detail column, which depends on it) of the enclosing `NavigationSplitView`.
+    public func dismissContent(animated: Bool = false) {
+        context.splitCoordinator?.dismissContent(animated: animated)
+    }
+
     /// Displays `route` in the detail column of the enclosing `NavigationSplitView`.
     /// No-ops if this context isn't scoped to a ``SplitCoordinator`` (i.e., not provided by ``SplitContainerView``).
     public func showDetail(_ route: SplitRouteType, animated: Bool = false) {
-        context.splitCoordinator?.show(route, animated: animated)
+        context.splitCoordinator?.showDetail(route, animated: animated)
     }
 
     /// Clears the detail column of the enclosing `NavigationSplitView`.
