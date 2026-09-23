@@ -25,7 +25,7 @@ private struct SheetStackModifier<CoordinatorType: StackableSheetProtocol & Shee
                 }
             )) { route in
                 route.destinationView
-                    .asModal(coordinator: coordinator)
+                    .environment(\.sheetCloseCoordinator, route.configuration.showsCloseButton ? coordinator : nil)
                     .presentationDetents(route.configuration.detents)
                     // We forward the same coordinator to the next view
                     .modifier(SheetStackModifier<CoordinatorType>(coordinator: coordinator,

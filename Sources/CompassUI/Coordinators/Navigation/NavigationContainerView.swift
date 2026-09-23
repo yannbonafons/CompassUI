@@ -21,6 +21,7 @@ public struct NavigationContainerView<RootViewType: View>: View {
     public var body: some View {
         NavigationStack(path: $navigationCoordinator.path) {
             contentView(navigationCoordinator)
+                .asModal()
                 .navigationDestination(for: AnyNavigationRoute.self) { route in
                     route.destinationView
                 }
