@@ -60,4 +60,13 @@ enum HomeSheetRoute: @MainActor SheetRoute {
             }
         }
     }
+    
+    var configuration: SheetConfiguration {
+        switch self {
+        case .home:
+            SheetConfiguration()
+        case .info:
+            SheetConfiguration(detents: [.medium], showsCloseButton: false)
+        }
+    }
 }
