@@ -17,6 +17,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CompassUI"
                BuildableName = "CompassUI"
+               BlueprintName = "CompassUI"
                ReferencedContainer = "container:">
             </BuildableReference>
          </BuildActionEntry>
@@ -35,6 +36,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "CompassUITests"
                BuildableName = "CompassUITests"
+               BlueprintName = "CompassUITests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
@@ -63,6 +65,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "CompassUI"
             BuildableName = "CompassUI"
+            BlueprintName = "CompassUI"
             ReferencedContainer = "container:">
          </BuildableReference>
       </MacroExpansion>
