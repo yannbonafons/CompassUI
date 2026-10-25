@@ -22,15 +22,42 @@ extension EnvironmentValues {
     }
 }
 
+/// Boxes a cancel action so it can flow through a `PreferenceKey` (closures aren't `Equatable`).
+/// Identity-based equality via `id` lets `onPreferenceChange` fire only when a different action is set.
+private struct SheetCancelActionContainer: Equatable {
+    let id = UUID()
+    let action: @MainActor () -> Void
+
+    static func == (lhs: SheetCancelActionContainer, rhs: SheetCancelActionContainer) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+private struct SheetCancelActionPreferenceKey: PreferenceKey {
+    static var defaultValue: SheetCancelActionContainer? { nil }
+
+    static func reduce(value: inout SheetCancelActionContainer?, nextValue: () -> SheetCancelActionContainer?) {
+        if let next = nextValue() { value = next }
+    }
+}
+
 private struct SheetModalNavigationModifier: ViewModifier {
     @Environment(\.sheetCloseCoordinator) private var coordinator
+    @State private var sheetCancelActionContainer: SheetCancelActionContainer?
 
     func body(content: Content) -> some View {
         content
+            .onPreferenceChange(SheetCancelActionPreferenceKey.self) { sheetCancelActionContainer in
+                self.sheetCancelActionContainer = sheetCancelActionContainer
+            }
             .toolbar {
                 if let coordinator {
                     CancelToolbarItem {
-                        coordinator.hideSheet()
+                        if let sheetCancelActionContainer {
+                            sheetCancelActionContainer.action()
+                        } else {
+                            coordinator.hideSheet()
+                        }
                     }
                 }
             }
@@ -62,5 +89,13 @@ extension View {
     /// Must be applied inside a `NavigationStack` for the button to render in the nav bar.
     func asModal() -> some View {
         self.modifier(SheetModalNavigationModifier())
+    }
+
+    /// Overrides the default cancellation action of the sheet-modal toolbar button for the receiver's subtree.
+    /// When set, tapping the cancel button runs `action` instead of calling ``SheetCoordinatorProtocol/hideSheet()``.
+    /// Apply this from inside a Scene (closest to its ViewModel) to customize dismissal behavior.
+    public func onSheetCancel(_ action: @escaping @MainActor () -> Void) -> some View {
+        preference(key: SheetCancelActionPreferenceKey.self,
+                   value: SheetCancelActionContainer(action: action))
     }
 }

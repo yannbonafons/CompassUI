@@ -49,6 +49,7 @@ CompassUI/
 - **HashableProtocol** provides identity-based `Equatable`/`Hashable` for reference-type coordinators
 - **Sheets are stackable** — `SheetStackModifier` recursively nests `.sheet` modifiers to support multiple stacked sheets
 - **`SheetCoordinatorProtocol`** (public) exposes `hideSheet()` for consumers; **`StackableSheetProtocol`** (public) exposes `sheetRoutes` for `SheetStackModifier`
+- **Cancel toolbar button** — `NavigationContainerView` auto-applies `.asModal()` on its content; when presented in a sheet, a cancel toolbar button appears and calls `hideSheet()` by default. A Scene can override this action from inside its body via `.onSheetCancel { ... }`, which publishes a `SheetCancelActionPreferenceKey` picked up by `SheetModalNavigationModifier`. The closure is wrapped in `SheetCancelActionContainer` (identity-based `Equatable` via `UUID`) to flow through the preference pipeline. Used when the dismissal must trigger ViewModel logic (save draft, confirmation alert, etc.)
 - **`AnyRoute` protocol** is internal; its `==` and `hash` must remain `public` because public types (`AnySheetRoute`, `AnySplitRoute`) conform through it
 - **`RouterContext.mockValue`** provides a ready-made mock context for SwiftUI previews
 - **`RouterGlobalContext`** groups app-level coordinators (sheet, alert, tab) — obtained via `AppCoordinator.globalContext` and passed to `NavigationContainerView` and `.externalLinks`
@@ -82,7 +83,7 @@ Scenes: **Home**, **Info**, **Settings** (3 tabs via `TabItem` enum).
 - **Builder pattern**: `BuilderProtocol` + `PayloadProtocol` for scene construction — `PayloadProtocol` carries a `RouterContext` and is associated with a `BuilderType`
 - **Router per scene**: Each scene has a dedicated router protocol + struct (e.g., `HomeRouterProtocol` / `HomeRouter: RouterProtocol`) that encapsulates navigation logic
 - **Scene/SceneModel separation**: `HomeScene` (View) + `HomeSceneModel` (@Observable) — SceneModel holds the router protocol (not the concrete type) for testability
-- **ModalNavigationModifier**: `.asModal(coordinator:)` helper adds a cancel toolbar button to sheet-presented views
+- **ModalNavigationModifier**: `.asModal()` is auto-applied by `NavigationContainerView`; it renders a cancel toolbar button when the view is presented in a sheet. Override its action from inside the Scene via `.onSheetCancel { model.saveDraft() }`
 - Routes are enums conforming to `NavigationRoute` or `SheetRoute`
 - Previews use `RouterContext.mockValue`
 
@@ -110,5 +111,5 @@ The Example app (`ExampleNavigationApp/`) is a separate Xcode project that depen
 - No force unwrapping
 - Prefer `let` over `var`
 - `public` only where necessary for cross-module access
-- ViewModifiers exposed via View extensions (e.g., `.stackableSheets(coordinator:)`, `.alert(coordinator:)`, `.externalLinks(_:globalContext:)`)
+- ViewModifiers exposed via View extensions (e.g., `.stackableSheets(coordinator:)`, `.alert(coordinator:)`, `.externalLinks(_:globalContext:)`, `.onSheetCancel(_:)`)
 - `SplitContainerView` is used directly as a view (not a modifier) since it wraps `NavigationSplitView` itself, the same way `NavigationContainerView` wraps `NavigationStack`

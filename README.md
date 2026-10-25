@@ -79,7 +79,7 @@ enum HomeRoute: NavigationRoute {
 }
 ```
 
-**Sheet routes** (modal) — the `RouterContext` must be forwarded so the new navigation stack shares the same global coordinators:
+**Sheet routes** (modal) — the `RouterContext` must be forwarded so the new navigation stack shares the same global coordinators. `NavigationContainerView` auto-applies `.asModal()`, so sheet-presented content automatically gets a cancel toolbar button that calls `hideSheet()`:
 
 ```swift
 enum HomeSheetRoute: SheetRoute {
@@ -91,12 +91,28 @@ enum HomeSheetRoute: SheetRoute {
         case .settings(let context):
             NavigationContainerView(globalContext: context.globalContext) { context in
                 SettingsView(context: context)
-                    .asModal(coordinator: context.sheetCoordinator)
             }
         }
     }
 }
 ```
+
+#### Overriding the cancel action
+
+By default the cancel button calls `hideSheet()`. If dismissal must run custom logic (saving a draft, showing a confirmation alert, etc.), apply `.onSheetCancel { ... }` **from inside the Scene** — the closure is published via a `PreferenceKey` and picked up by the modal toolbar, so the action lives next to its `ViewModel`:
+
+```swift
+struct SettingsScene: View {
+    @State var model: SettingsSceneModel
+
+    var body: some View {
+        Form { ... }
+            .onSheetCancel { model.saveDraft() }
+    }
+}
+```
+
+When set, the closure fully replaces the default `hideSheet()` behavior — call it explicitly if you still want to dismiss after your custom logic.
 
 ### 4. Forward the context between screens
 

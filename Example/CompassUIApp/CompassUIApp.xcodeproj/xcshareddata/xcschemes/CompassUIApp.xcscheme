@@ -17,6 +17,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6FF56558D7E94C56570FACEB"
                BuildableName = "CompassUIApp.app"
+               BlueprintName = "CompassUIApp"
                ReferencedContainer = "container:CompassUIApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,6 +47,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6FF56558D7E94C56570FACEB"
             BuildableName = "CompassUIApp.app"
+            BlueprintName = "CompassUIApp"
             ReferencedContainer = "container:CompassUIApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -62,6 +64,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6FF56558D7E94C56570FACEB"
             BuildableName = "CompassUIApp.app"
+            BlueprintName = "CompassUIApp"
             ReferencedContainer = "container:CompassUIApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
