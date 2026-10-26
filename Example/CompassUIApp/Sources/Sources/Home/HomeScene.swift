@@ -15,6 +15,7 @@ protocol HomeRouterProtocol {
     func showHomeAsDetail()
     func close()
     func showHome()
+    func showAlert()
 }
 
 struct HomeRouter: HomeRouterProtocol, @MainActor RouterProtocol {
@@ -47,6 +48,11 @@ struct HomeRouter: HomeRouterProtocol, @MainActor RouterProtocol {
     func showHome() {
         let homePayload = HomePayload(context: context)
         showSheet(.home(homePayload: homePayload))
+    }
+
+    func showAlert() {
+        showAlert(AlertConfiguration(titleAndMessageType: .message(message: "Alert!"),
+                                     actions: [.ok()]))
     }
 
     func close() {
@@ -108,6 +114,10 @@ class HomeSceneModel {
     func close() {
         router.close()
     }
+    
+    func showAlert() {
+        router.showAlert()
+    }
 }
 
 struct HomeScene: View {
@@ -142,6 +152,9 @@ struct HomeScene: View {
             }
             Button("Show Home") {
                 homeSceneModel.showHome()
+            }
+            Button("Show Alert") {
+                homeSceneModel.showAlert()
             }
             Button("Close sheet") {
                 homeSceneModel.close()

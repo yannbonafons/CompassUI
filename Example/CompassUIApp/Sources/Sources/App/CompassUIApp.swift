@@ -46,8 +46,8 @@ struct ExampleNavigationApp: App {
                 }
             }
         }
-        .stackableSheets(coordinator: appCoordinator.sheetCoordinator)
-        .alert(coordinator: appCoordinator.alertCoordinator)
+        .stackableSheetsAndAlert(sheetCoordinator: appCoordinator.sheetCoordinator,
+                                 alertCoordinator: appCoordinator.alertCoordinator)
         .externalLinks(AppExternalLinkRoute.self,
                        globalContext: appCoordinator.globalContext)
     }
