@@ -50,8 +50,8 @@ struct MyApp: App {
                     }
                 }
             }
-            .stackableSheets(coordinator: appCoordinator.sheetCoordinator)
-            .alert(coordinator: appCoordinator.alertCoordinator)
+            .stackableSheetsAndAlert(sheetCoordinator: appCoordinator.sheetCoordinator,
+                                     alertCoordinator: appCoordinator.alertCoordinator)
             .externalLinks(AppExternalLinkRoute.self,
                            globalContext: appCoordinator.globalContext)
         }
@@ -59,7 +59,7 @@ struct MyApp: App {
 }
 ```
 
-> `.stackableSheets`, `.alert`, and `.externalLinks` must be applied **once**, high in the view hierarchy (e.g., on the root `TabView`).
+> `.stackableSheetsAndAlert` and `.externalLinks` must be applied **once**, high in the view hierarchy (e.g., on the root `TabView`).
 
 ### 3. Define routes
 
@@ -173,6 +173,8 @@ You can also use the coordinators directly via `RouterContext` if you don't need
 ### 6. Show alerts
 
 Alerts are displayed one at a time. If `showAlert` is called while an alert is already visible, the new one is queued and shown after the current one is dismissed.
+
+Alerts are always presented from the top-most sheet (or the root view when no sheet is shown), so showing an alert never dismisses the sheet currently on screen.
 
 ```swift
 router.showAlert(AlertConfiguration(

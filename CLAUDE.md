@@ -48,6 +48,7 @@ CompassUI/
 - **AnimatedCoordinator** protocol provides `execute(animated:action:)` to optionally disable animations via `withTransaction`
 - **HashableProtocol** provides identity-based `Equatable`/`Hashable` for reference-type coordinators
 - **Sheets are stackable** — `SheetStackModifier` recursively nests `.sheet` modifiers to support multiple stacked sheets
+- **Alerts are presented by `SheetStackModifier`** — each stack level attaches `CustomAlertModifier` with `isActive: sheetRoutes.count == index`, so only the top-most presenter (root or top sheet) shows the alert. Presenting an alert from a lower level would make SwiftUI dismiss the sheets above it. Hence sheets and alerts are enabled together via the single public `.stackableSheetsAndAlert(sheetCoordinator:alertCoordinator:)`; `.alert(coordinator:isActive:)` is `internal`
 - **`SheetCoordinatorProtocol`** (public) exposes `hideSheet()` for consumers; **`StackableSheetProtocol`** (public) exposes `sheetRoutes` for `SheetStackModifier`
 - **Cancel toolbar button** — `NavigationContainerView` auto-applies `.asModal()` on its content; when presented in a sheet, a cancel toolbar button appears and calls `hideSheet()` by default. A Scene can override this action from inside its body via `.onSheetCancel { ... }`, which publishes a `SheetCancelActionPreferenceKey` picked up by `SheetModalNavigationModifier`. The closure is wrapped in `SheetCancelActionContainer` (identity-based `Equatable` via `UUID`) to flow through the preference pipeline. Used when the dismissal must trigger ViewModel logic (save draft, confirmation alert, etc.)
 - **`AnyRoute` protocol** is internal; its `==` and `hash` must remain `public` because public types (`AnySheetRoute`, `AnySplitRoute`) conform through it
@@ -111,5 +112,5 @@ The Example app (`ExampleNavigationApp/`) is a separate Xcode project that depen
 - No force unwrapping
 - Prefer `let` over `var`
 - `public` only where necessary for cross-module access
-- ViewModifiers exposed via View extensions (e.g., `.stackableSheets(coordinator:)`, `.alert(coordinator:)`, `.externalLinks(_:globalContext:)`, `.onSheetCancel(_:)`)
+- ViewModifiers exposed via View extensions (e.g., `.stackableSheetsAndAlert(sheetCoordinator:alertCoordinator:)`, `.externalLinks(_:globalContext:)`, `.onSheetCancel(_:)`)
 - `SplitContainerView` is used directly as a view (not a modifier) since it wraps `NavigationSplitView` itself, the same way `NavigationContainerView` wraps `NavigationStack`
