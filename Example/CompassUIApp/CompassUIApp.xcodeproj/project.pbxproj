@@ -21,6 +21,7 @@
 			membershipExceptions = (
 				App/AppExternalLinkRoute.swift,
 				App/CompassUIApp.swift,
+				App/MainTabView.swift,
 				App/TabItem.swift,
 				"Common/AlertAction+extension.swift",
 				Common/BuilderProtocol.swift,
@@ -28,6 +29,9 @@
 				Home/HomeScene.swift,
 				Info/InfoRoute.swift,
 				Info/InfoScene.swift,
+				Onboarding/LoginScene.swift,
+				Onboarding/OnboardingRoute.swift,
+				Onboarding/OnboardingScene.swift,
 				Settings/SettingsRoute.swift,
 				Settings/SettingsScene.swift,
 			);

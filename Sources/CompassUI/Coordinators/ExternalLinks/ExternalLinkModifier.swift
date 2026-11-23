@@ -8,12 +8,13 @@
 import SwiftUI
 
 private struct ExternalLinkModifier<RouteType: ExternalLinkRoute>: ViewModifier {
-    let globalContext: RouterGlobalContext
+    let globalContext: RouteType.ContextType.GlobalContext
     @State private var navigationCoordinator = NavigationCoordinator()
 
-    private var context: RouterContext {
-        RouterContext(navigationCoordinator: navigationCoordinator,
-                      globalContext: globalContext)
+    private var context: RouteType.ContextType {
+        RouteType.ContextType(navigationCoordinator: navigationCoordinator,
+                              splitCoordinator: nil,
+                              globalContext: globalContext)
     }
 
     func body(content: Content) -> some View {
@@ -43,7 +44,7 @@ public extension View {
     /// Handles deeplinks (`onOpenURL`) and universal links. Apply once at the root level.
     func externalLinks<RouteType: ExternalLinkRoute>(
         _ routeType: RouteType.Type,
-        globalContext: RouterGlobalContext
+        globalContext: RouteType.ContextType.GlobalContext
     ) -> some View {
         modifier(ExternalLinkModifier<RouteType>(globalContext: globalContext))
     }

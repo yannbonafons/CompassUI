@@ -10,45 +10,45 @@ import CompassUI
 
 @main
 struct ExampleNavigationApp: App {
-    @State var appCoordinator = AppCoordinator(selectedTab: TabItem.home,
-                                               possibleTabs: TabItem.allCases)
-    
+    /// Drives the onboarding, which has no tab bar.
+    @State private var appCoordinatorLite = AppCoordinatorLite()
+    /// Created when the onboarding ends; its presence swaps the onboarding for the tab bar.
+    @State private var appCoordinator: AppCoordinator?
+
     var body: some Scene {
         WindowGroup {
-            tabView
+            rootView
         }
     }
-    
-    var tabView: some View {
-        TabView(selection: $appCoordinator.tabCoordinator.selectedTab) {
-            if (appCoordinator.tabCoordinator.isTabAvailable(TabItem.home)) {
-                Tab("Home", systemImage: "house", value: TabItem.home.erased()) {
-                    SplitContainerView(HomeSplitRoute.self) { splitCoordinator in
-                        NavigationContainerView { navigationCoordinator in
-                            HomeBuilder.createView(
-                                with: HomePayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
-                                                                         splitCoordinator: splitCoordinator,
-                                                                         globalContext: appCoordinator.globalContext))
-                            )
-                        }
-                    }
-                    .navigationSplitViewStyle(.balanced)
-                }
-            }
-            if (appCoordinator.tabCoordinator.isTabAvailable(TabItem.settings)) {
-                Tab("Settings", systemImage: "gear", value: TabItem.settings.erased()) {
-                    NavigationContainerView { navigationCoordinator in
-                        SettingsBuilder.createView(
-                            with: SettingsPayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
-                                                                         globalContext: appCoordinator.globalContext))
-                        )
-                    }
-                }
+
+    private var rootView: some View {
+        Group {
+            if let appCoordinator {
+                MainTabView(appCoordinator: appCoordinator)
+            } else {
+                onboardingView
             }
         }
-        .stackableSheetsAndAlert(sheetCoordinator: appCoordinator.sheetCoordinator,
-                                 alertCoordinator: appCoordinator.alertCoordinator)
-        .externalLinks(AppExternalLinkRoute.self,
-                       globalContext: appCoordinator.globalContext)
+        // Sheets and alerts are attached once: the tab-enabled coordinator reuses the lite one's coordinators.
+        .stackableSheetsAndAlert(sheetCoordinator: appCoordinatorLite.sheetCoordinator,
+                                 alertCoordinator: appCoordinatorLite.alertCoordinator)
+    }
+
+    private var onboardingView: some View {
+        NavigationContainerView { navigationCoordinator in
+            OnboardingBuilder.createView(
+                with: OnboardingPayload(context: RouterContextLite(navigationCoordinator: navigationCoordinator,
+                                                                   globalContext: appCoordinatorLite.globalContext),
+                                        onCompleted: finishOnboarding)
+            )
+        }
+    }
+
+    private func finishOnboarding() {
+        withAnimation {
+            appCoordinator = AppCoordinator(from: appCoordinatorLite,
+                                            selectedTab: TabItem.home,
+                                            possibleTabs: TabItem.allCases)
+        }
     }
 }

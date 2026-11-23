@@ -6,20 +6,26 @@
 //
 
 /// Optional convenience layer over coordinators. Create one per scene/feature to get
-/// type-safe `push`, `pop`, `showSheet`, `selectTab`, `showAlert` methods
+/// type-safe `push`, `pop`, `showSheet`, `showAlert` methods
 /// scoped to that scene's route types.
+///
+/// Works with any ``RouterContextProtocol``: ``RouterContext`` (with tab bar) or
+/// ``RouterContextLite`` (without tab bar). Tab selection is only available through
+/// ``TabRouterProtocol``, split columns through ``SplitRouterProtocol``.
 ///
 /// Associated types default to ``EmptyRoute`` so a conforming type only needs to specify
 /// the route types it actually uses (navigation, sheet).
 ///
-/// You can always use coordinators directly via ``RouterContext`` instead.
+/// You can always use coordinators directly via the context instead.
 public protocol RouterProtocol {
+    /// The context type this router reads its coordinators from.
+    associatedtype Context: RouterContextProtocol
     /// The route type pushed via ``push(_:animated:)``. Defaults to ``EmptyRoute`` when unused.
-    associatedtype NavigationRouteType: NavigationRoute
+    associatedtype NavigationRouteType: NavigationRoute = EmptyRoute
     /// The route type presented via ``showSheet(_:animated:)``. Defaults to ``EmptyRoute`` when unused.
-    associatedtype SheetRouteType: SheetRoute
+    associatedtype SheetRouteType: SheetRoute = EmptyRoute
 
-    var context: RouterContext { get }
+    var context: Context { get }
 }
 
 extension RouterProtocol {
@@ -58,28 +64,29 @@ extension RouterProtocol {
         context.sheetCoordinator.hideAll()
     }
 
-    /// Selects `route` as the active tab, if it is one of the possible tabs.
-    public func selectTab<TabRouteType: TabRoute>(_ route: TabRouteType) {
-        context.tabCoordinator.selectecTab(route)
-    }
-
     /// Queues `alertConfiguration` for presentation.
     public func showAlert(_ alertConfiguration: AlertConfiguration) {
         context.alertCoordinator.showAlert(alertConfiguration)
     }
 }
 
-/// Optional convenience layer over coordinators. Create one per scene/feature to get
-/// type-safe `showDetail` methods
-/// scoped to that scene's route types.
-///
-/// Associated types default to ``EmptyRoute`` so a conforming type only needs to specify
-/// the route types it actually uses (sheet).
-///
-/// You can always use coordinators directly via ``RouterContext`` instead.
+/// ``RouterProtocol`` for scenes living in an app with a tab bar. Adds `selectTab`, which requires
+/// the full ``RouterContext`` (the lite context has no ``TabCoordinator``).
+public protocol TabRouterProtocol: RouterProtocol where Context == RouterContext {}
+
+extension TabRouterProtocol {
+    /// Selects `route` as the active tab, if it is one of the possible tabs.
+    public func selectTab<TabRouteType: TabRoute>(_ route: TabRouteType) {
+        context.tabCoordinator.selectecTab(route)
+    }
+}
+
+/// ``RouterProtocol`` for scenes inside a ``SplitContainerView``. Adds `showContent`, `dismissContent`,
+/// `showDetail` and `dismissDetail`, typed with the scene's split route type.
 public protocol SplitRouterProtocol: RouterProtocol {
-    /// The route type presented via ``showDetail(_:animated:)``. Defaults to ``EmptyRoute`` when unused.
-    associatedtype SplitRouteType: SplitRoute
+    /// The route type presented via ``showContent(_:animated:)`` and ``showDetail(_:animated:)``.
+    /// Defaults to ``EmptyRoute`` when unused.
+    associatedtype SplitRouteType: SplitRoute = EmptyRoute
 }
 
 extension SplitRouterProtocol {
@@ -104,5 +111,4 @@ extension SplitRouterProtocol {
     public func dismissDetail(animated: Bool = false) {
         context.splitCoordinator?.dismissDetail(animated: animated)
     }
-
 }
