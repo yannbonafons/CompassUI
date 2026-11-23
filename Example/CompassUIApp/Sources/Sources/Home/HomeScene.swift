@@ -18,7 +18,7 @@ protocol HomeRouterProtocol {
     func showAlert()
 }
 
-struct HomeRouter: HomeRouterProtocol, @MainActor RouterProtocol {
+struct HomeRouter: HomeRouterProtocol, @MainActor SplitRouterProtocol {
     typealias NavigationRouteType = HomeRoute
     typealias SheetRouteType = HomeSheetRoute
     typealias SplitRouteType = HomeSplitRoute

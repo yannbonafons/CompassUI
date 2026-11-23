@@ -29,6 +29,17 @@ public final class AppCoordinator {
                                              possibleTabs: possibleTabs.map({ $0.erased() }))
     }
 
+    /// Creates a tab-enabled coordinator that takes over the sheet and alert coordinators of an
+    /// ``AppCoordinatorLite`` (e.g., when an onboarding flow ends and the tab bar appears).
+    public convenience init<TabRouteType: TabRoute>(from lite: AppCoordinatorLite,
+                                                    selectedTab: TabRouteType,
+                                                    possibleTabs: [TabRouteType]) {
+        self.init(sheetCoordinator: lite.sheetCoordinator,
+                  alertCoordinator: lite.alertCoordinator,
+                  selectedTab: selectedTab,
+                  possibleTabs: possibleTabs)
+    }
+
     /// The app-level coordinators (sheet, alert, tab) grouped for consumers that need all three.
     public var globalContext: RouterGlobalContext {
         RouterGlobalContext(sheetCoordinator: sheetCoordinator,
