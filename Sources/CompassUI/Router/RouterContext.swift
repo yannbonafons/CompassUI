@@ -74,3 +74,17 @@ public struct RouterGlobalContext: Hashable {
         )
     }
 }
+
+/// App-level coordinators (sheet, alert, tab) shared across all navigation stacks.
+/// Typically obtained from ``AppCoordinator/globalContext`` and passed to
+/// ``NavigationContainerView`` and `.externalLinks`.
+public struct RouterGlobalContextLite: Hashable {
+    public let sheetCoordinator: SheetCoordinator
+    public let alertCoordinator: AlertCoordinator
+
+    public init(sheetCoordinator: SheetCoordinator,
+                alertCoordinator: AlertCoordinator) {
+        self.sheetCoordinator = sheetCoordinator
+        self.alertCoordinator = alertCoordinator
+    }
+}
