@@ -2,7 +2,7 @@
 
 A coordinator-based navigation library for SwiftUI.
 
-CompassUI provides a set of coordinators that manage push navigation, stackable sheets, split view management, alerts with queuing, tab selection, and deeplink handling — all built on `@Observable` with no Combine dependency.
+CompassUI provides a set of coordinators that manage push navigation, stackable sheets, split view management (two or three columns), alerts with queuing, tab selection, and deeplink handling — all built on `@Observable` with no Combine dependency.
 
 ## Requirements
 
@@ -31,9 +31,11 @@ enum TabItem: TabRoute, CaseIterable {
 }
 ```
 
+> No tab bar in your app (or in a flow such as onboarding)? Skip to [Apps and flows without a tab bar](#8-apps-and-flows-without-a-tab-bar-lite-variants).
+
 ### 2. Set up the App with `AppCoordinator`
 
-`AppCoordinator` groups the app-level coordinators (sheet, alert, tab). Each tab gets its own `NavigationContainerView`, which acts like a `UINavigationController` — it creates its own navigation stack and provides a `RouterContext` to its content.
+`AppCoordinator` groups the app-level coordinators (sheet, alert, tab). Each tab gets its own `NavigationContainerView`, which acts like a `UINavigationController` — it creates its own navigation stack and hands your content closure its `NavigationCoordinator`. You build the `RouterContext` yourself from that coordinator and the app's global context.
 
 ```swift
 @main
@@ -45,8 +47,11 @@ struct MyApp: App {
         WindowGroup {
             TabView(selection: $appCoordinator.tabCoordinator.selectedTab) {
                 Tab("Home", systemImage: "house", value: TabItem.home.erased()) {
-                    NavigationContainerView(globalContext: appCoordinator.globalContext) { context in
-                        HomeBuilder.createView(with: HomePayload(context: context))
+                    NavigationContainerView { navigationCoordinator in
+                        HomeBuilder.createView(
+                            with: HomePayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
+                                                                     globalContext: appCoordinator.globalContext))
+                        )
                     }
                 }
             }
@@ -79,23 +84,28 @@ enum HomeRoute: NavigationRoute {
 }
 ```
 
-**Sheet routes** (modal) — the `RouterContext` must be forwarded so the new navigation stack shares the same global coordinators. `NavigationContainerView` auto-applies `.asModal()`, so sheet-presented content automatically gets a cancel toolbar button that calls `hideSheet()`:
+**Sheet routes** (modal) — a sheet opens a new navigation stack, so wrap its content in a `NavigationContainerView` and build a fresh `RouterContext` from the new `NavigationCoordinator` and the `globalContext` of the context that presents it. `NavigationContainerView` auto-applies `.asModal()`, so sheet-presented content automatically gets a cancel toolbar button that calls `hideSheet()`:
 
 ```swift
 enum HomeSheetRoute: SheetRoute {
-    case settings(context: RouterContext)
+    case settings(settingsPayload: SettingsPayload)
 
     @ViewBuilder
     var destinationView: some View {
         switch self {
-        case .settings(let context):
-            NavigationContainerView(globalContext: context.globalContext) { context in
-                SettingsView(context: context)
+        case .settings(let payload):
+            NavigationContainerView { navigationCoordinator in
+                SettingsBuilder.createView(
+                    with: SettingsPayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
+                                                                 globalContext: payload.context.globalContext))
+                )
             }
         }
     }
 }
 ```
+
+Sheets can be customized by providing a `configuration` (`SheetConfiguration`: detents, close button...).
 
 #### Overriding the cancel action
 
@@ -126,35 +136,26 @@ func showDetail(itemId: String) {
 }
 ```
 
-When opening a **new navigation** (e.g., a sheet), pass `context.globalContext` to `NavigationContainerView`. It will create a fresh `NavigationCoordinator` and provide a new `RouterContext` in its closure.
-
-**Split routes** (detail column of a `NavigationSplitView`):
-
-```swift
-enum HomeSplitRoute: SplitRoute {
-    case detail(itemId: String)
-
-    @ViewBuilder
-    var destinationView: some View {
-        switch self {
-        case .detail(let itemId):
-            DetailView(itemId: itemId)
-        }
-    }
-}
-```
+When opening a **new navigation** (e.g., a sheet), read `context.globalContext` and build a new `RouterContext` inside a `NavigationContainerView`, as shown in the sheet route above. The container creates a fresh `NavigationCoordinator` for it.
 
 ### 5. Create a Router (optional but recommended)
 
-`RouterProtocol` provides typed convenience methods (`push`, `pop`, `showSheet`, `hideSheet`, `selectTab`, `showAlert`, `showDetail`, `dismissDetail`...) that delegate to the appropriate coordinator. Create one per scene for clean separation.
+`RouterProtocol` provides typed convenience methods (`push`, `pop`, `popToRoot`, `showSheet`, `hideSheet`, `hideAll`, `showAlert`) that delegate to the appropriate coordinator. Create one per scene for clean separation. It is generic over its context (`RouterContext` or `RouterContextLite`).
 
 Associated types default to `EmptyRoute` — a no-op route conforming to `SheetRoute`, `NavigationRoute`, and `SplitRoute` at once — so a router only needs to specify the route types it actually uses.
+
+Extra capabilities are opt-in through sub-protocols:
+
+| Protocol | Adds | Requires |
+|---|---|---|
+| `RouterProtocol` | `push`, `pop`, `popToRoot`, `showSheet`, `hideSheet`, `hideAll`, `showAlert` | any context |
+| `TabRouterProtocol` | `selectTab` | `RouterContext` (with tab bar) |
+| `SplitRouterProtocol` | `showContent`, `dismissContent`, `showDetail`, `dismissDetail` | a context from a `SplitContainerView` |
 
 ```swift
 struct HomeRouter: RouterProtocol {
     typealias NavigationRouteType = HomeRoute
     typealias SheetRouteType = HomeSheetRoute
-    // SplitRouteType defaults to EmptyRoute since this scene doesn't use a split view
 
     let context: RouterContext
 
@@ -168,7 +169,7 @@ struct HomeRouter: RouterProtocol {
 }
 ```
 
-You can also use the coordinators directly via `RouterContext` if you don't need the typed convenience layer.
+You can also use the coordinators directly via the context if you don't need the typed convenience layer.
 
 ### 6. Show alerts
 
@@ -191,40 +192,173 @@ router.showAlert(AlertConfiguration(
 ))
 ```
 
-### 7. Manage a split view (sidebar + detail)
+### 7. Manage a split view
 
-`SplitContainerView` is the split-view equivalent of `NavigationContainerView`: it wraps a `NavigationSplitView` (sidebar + detail only, for now) and creates its own `SplitCoordinator`, driving the detail column from `SplitCoordinator.selectedRoute`.
+`SplitContainerView` is the split-view equivalent of `NavigationContainerView`: it wraps a `NavigationSplitView` and creates its own `SplitCoordinator`, which drives the content and detail columns. Two initializers mirror the native ones.
+
+**Split routes** are presented in the content/detail columns. Wrap their content in a `NavigationContainerView` if the column needs its own navigation stack:
+
+```swift
+enum HomeSplitRoute: SplitRoute {
+    case info(infoPayload: InfoPayload)
+
+    @ViewBuilder
+    var destinationView: some View {
+        switch self {
+        case .info(let payload):
+            NavigationContainerView { navigationCoordinator in
+                InfoBuilder.createView(
+                    with: InfoPayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
+                                                             globalContext: payload.context.globalContext))
+                )
+            }
+        }
+    }
+}
+```
+
+**Two columns** (sidebar + detail) — a single `emptyView` placeholder is shown in the detail column when nothing is selected:
 
 ```swift
 SplitContainerView(HomeSplitRoute.self) { splitCoordinator in
-    SidebarView(splitCoordinator: splitCoordinator, context: context)
+    NavigationContainerView { navigationCoordinator in
+        HomeBuilder.createView(
+            with: HomePayload(context: RouterContext(navigationCoordinator: navigationCoordinator,
+                                                     splitCoordinator: splitCoordinator,
+                                                     globalContext: appCoordinator.globalContext))
+        )
+    }
 } emptyView: {
     AnyView(Text("Select an item"))
 }
 ```
 
-Call `router.showDetail(.detail(itemId: itemId))` to populate the detail column, and `router.dismissDetail()` to clear it back to the empty placeholder. Both are provided by `RouterProtocol` and delegate to `RouterContext.splitCoordinator`, which is only set when the context originates from a `SplitContainerView` (`nil` otherwise, in which case these calls are no-ops).
+**Three columns** (sidebar + content + detail) — distinct placeholders for each column (both default to `EmptyView`):
+
+```swift
+SplitContainerView(HomeSplitRoute.self) { splitCoordinator in
+    SidebarView(splitCoordinator: splitCoordinator)
+} contentEmptyView: {
+    AnyView(Text("Select a category"))
+} detailEmptyView: {
+    AnyView(Text("Select an item"))
+}
+```
+
+Pass the `splitCoordinator` to the `RouterContext` of the scenes that need to drive the columns. Then make their router conform to `SplitRouterProtocol` and set `SplitRouteType`:
+
+```swift
+struct HomeRouter: SplitRouterProtocol {
+    typealias SplitRouteType = HomeSplitRoute
+
+    let context: RouterContext
+
+    func showInfoAsDetail() {
+        showDetail(.info(infoPayload: InfoPayload(context: context)))
+    }
+}
+```
+
+- `showContent(_:)` / `dismissContent()` drive the content column (three-column layout). Dismissing the content also clears the detail, which depends on it.
+- `showDetail(_:)` / `dismissDetail()` drive the detail column and fall back to the empty placeholder.
+- The compact column (iPhone, split-screen) follows automatically: `showContent` → content, `showDetail` → detail, `dismissDetail` → content (or sidebar if none is shown), `dismissContent` → sidebar.
+- These calls are no-ops when the context has no `splitCoordinator` (i.e., it doesn't originate from a `SplitContainerView`).
+
+### 8. Apps and flows without a tab bar (Lite variants)
+
+For an app without tabs — or a flow that runs before the tab bar exists, such as onboarding or login — use the "Lite" counterparts. They are identical to their full versions minus the `TabCoordinator`:
+
+| With tab bar | Without tab bar |
+|---|---|
+| `AppCoordinator` | `AppCoordinatorLite` |
+| `RouterGlobalContext` | `RouterGlobalContextLite` |
+| `RouterContext` | `RouterContextLite` |
+
+`NavigationContainerView`, `SplitContainerView`, `RouterProtocol`, `SplitRouterProtocol`, `.stackableSheetsAndAlert` and `.externalLinks` work with both. Only `selectTab` (via `TabRouterProtocol`) requires the full `RouterContext`.
+
+```swift
+@main
+struct MyApp: App {
+    @State private var appCoordinatorLite = AppCoordinatorLite()
+
+    var body: some Scene {
+        WindowGroup {
+            NavigationContainerView { navigationCoordinator in
+                OnboardingBuilder.createView(
+                    with: OnboardingPayload(context: RouterContextLite(navigationCoordinator: navigationCoordinator,
+                                                                       globalContext: appCoordinatorLite.globalContext))
+                )
+            }
+            .stackableSheetsAndAlert(sheetCoordinator: appCoordinatorLite.sheetCoordinator,
+                                     alertCoordinator: appCoordinatorLite.alertCoordinator)
+        }
+    }
+}
+```
+
+A router for a tab-less scene simply uses the lite context:
+
+```swift
+struct OnboardingRouter: RouterProtocol {
+    typealias SheetRouteType = OnboardingSheetRoute
+
+    let context: RouterContextLite
+}
+```
+
+#### Switching from Lite to the tab bar
+
+When the flow ends and the tab bar must appear, build an `AppCoordinator` **from** the lite one. It takes over the same sheet and alert coordinators, so pending sheets and alerts are preserved and `.stackableSheetsAndAlert` only needs to be attached once:
+
+```swift
+@State private var appCoordinatorLite = AppCoordinatorLite()
+@State private var appCoordinator: AppCoordinator?
+
+var body: some Scene {
+    WindowGroup {
+        Group {
+            if let appCoordinator {
+                MainTabView(appCoordinator: appCoordinator)
+            } else {
+                onboardingView
+            }
+        }
+        // Attached once: the tab-enabled coordinator reuses the lite one's coordinators.
+        .stackableSheetsAndAlert(sheetCoordinator: appCoordinatorLite.sheetCoordinator,
+                                 alertCoordinator: appCoordinatorLite.alertCoordinator)
+    }
+}
+
+private func finishOnboarding() {
+    withAnimation {
+        appCoordinator = AppCoordinator(from: appCoordinatorLite,
+                                        selectedTab: TabItem.home,
+                                        possibleTabs: TabItem.allCases)
+    }
+}
+```
 
 ## Architecture Overview
 
 ```
-AppCoordinator (app-level)
-├── SheetCoordinator      — stackable sheet presentation
-├── AlertCoordinator      — alert queue (FIFO, one at a time)
-└── TabCoordinator        — tab selection
-        ↓ RouterGlobalContext
-NavigationContainerView (one per tab)
-└── NavigationCoordinator — push/pop navigation stack
-        ↓ RouterContext (global + navigation [+ split])
+AppCoordinator (app-level, with tabs)          AppCoordinatorLite (app-level, no tabs)
+├── SheetCoordinator  — stackable sheets       ├── SheetCoordinator
+├── AlertCoordinator  — alert queue (FIFO)     └── AlertCoordinator
+└── TabCoordinator    — tab selection
+        ↓ RouterGlobalContext                          ↓ RouterGlobalContextLite
 
-SplitContainerView (sidebar + detail)
-└── SplitCoordinator      — selected detail route
-        ↓ RouterContext (global + navigation + split)
+NavigationContainerView (one per tab / sheet / column)
+└── NavigationCoordinator — push/pop navigation stack
+        ↓ RouterContext / RouterContextLite (global + navigation [+ split])
+
+SplitContainerView (sidebar + [content +] detail)
+└── SplitCoordinator      — selected content and detail routes
+        ↓ RouterContext / RouterContextLite (global + navigation + split)
 ```
 
-- **`RouterGlobalContext`** = sheet + alert + tab coordinators, shared across all navigation stacks
-- **`RouterContext`** = `RouterGlobalContext` + `NavigationCoordinator` + optional `SplitCoordinator`, scoped to a single navigation (and, optionally, split) stack
-- **Sheets stack** on top of each other (managed at the `TabView` level, not per-screen)
+- **`RouterGlobalContext`** / **`RouterGlobalContextLite`** = sheet + alert (+ tab) coordinators, shared across all navigation stacks
+- **`RouterContext`** / **`RouterContextLite`** = global context + `NavigationCoordinator` + optional `SplitCoordinator`, scoped to a single navigation (and, optionally, split) stack. You create it in the `NavigationContainerView` closure
+- **Sheets stack** on top of each other (managed once at the root level, not per-screen)
 - **Type erasure is internal** — you work with typed routes, never with `Any*Route`
 - **`EmptyRoute`** is a no-op route conforming to `SheetRoute`, `NavigationRoute`, and `SplitRoute` at once — used as the default associated type in `RouterProtocol` so a router only declares the route types it actually needs
 
@@ -238,7 +372,7 @@ Navigation routes must be `Hashable` (required by `NavigationPath`). Best practi
 
 ## Deeplinks & Universal Links
 
-Conform to `ExternalLinkRoute` and implement `resolve(url:context:)`. Matched routes are presented as sheets automatically.
+Conform to `ExternalLinkRoute` and implement `resolve(url:context:)`. Matched routes are presented as sheets automatically. The `context` is a `RouterContext` by default; set `typealias ContextType = RouterContextLite` for an app without tab bar.
 
 ```swift
 enum AppExternalLinkRoute: ExternalLinkRoute {
@@ -266,7 +400,7 @@ enum AppExternalLinkRoute: ExternalLinkRoute {
 
 ## Previews
 
-Use `RouterContext.mockValue` for SwiftUI previews:
+Use `RouterContext.mockValue` (or `RouterContextLite.mockValue`) for SwiftUI previews:
 
 ```swift
 #Preview {
